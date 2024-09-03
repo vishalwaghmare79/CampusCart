@@ -1,6 +1,6 @@
 const express = require('express');
-const { registerController, loginController, testController } = require('../controllers/authController');
-const { requireSignIn, isAdmin } = require('../middleware/authMiddleware');
+const { registerController, loginController, adminAuthController, userAuthController } = require('../controllers/authController');
+const { requireSignIn, isAdmin } = require('../middleware/authMidleware');
 
 const router = express.Router();
 
@@ -10,7 +10,11 @@ router.post('/register', registerController);
 // Route for user login - handles POST requests to /login
 router.post('/login', loginController);
 
-// Route for admin test - requires sign-in and admin access
-router.get('/test', requireSignIn, isAdmin, testController);
+// Route for verifying admin functionality - requires sign-in and admin access
+router.get('/admin/verify-admin', requireSignIn, isAdmin, adminAuthController);
+
+// Route for verifying user authentication status
+router.get('/auth/verify-user', requireSignIn, userAuthController);
+
 
 module.exports = router;

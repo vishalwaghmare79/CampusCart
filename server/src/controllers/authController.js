@@ -130,8 +130,8 @@ const loginController = async (req, res) => {
   }
 };
 
-// Controller for handling requests to a protected route
-const testController = (req, res) => {
+// Controller for handling admin authentication verification
+const adminAuthController = (req, res) => {
   try {
     const user = req.user; 
     res.status(200).json({
@@ -151,4 +151,11 @@ const testController = (req, res) => {
   }
 };
 
-module.exports = { registerController, loginController, testController };
+// Controller function to handle user authentication check
+const userAuthController = (req, res) => {
+  res.status(200).json({ ok: true });
+};
+
+module.exports = { registerController, loginController, adminAuthController, userAuthController };
+
+
