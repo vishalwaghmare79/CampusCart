@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/auth";
 import { Outlet } from "react-router-dom";
 import axios from "axios";
-import LoginFirst from "../components/spinner/LoginFirst";
+import VerifyLogin from "../components/spinner/VerifyLogin";
 
-export const PrivateRoute = () => {
+export const VerifyAdminRoute = () => {
     const [ok, setOk] = useState(false);
     const [auth] = useAuth();
 
@@ -12,12 +12,13 @@ export const PrivateRoute = () => {
         // Function to check user authentication
         const authCheck = async () => {
             try {
-                const res = await axios.get(`${process.env.REACT_APP_API}/api/v1/auth/user-auth`, {
+                const res = await axios.get(`${process.env.REACT_APP_API}/api/v1/auth/verify-admin`, {
                     headers: {
                         "Authorization": `${auth?.token}`
                     }
                 });                
                 setOk(res.data.ok);
+                console.log(res.data);
             } catch (error) {
                 console.error("Authentication check failed", error);
                 setOk(false);
@@ -33,5 +34,5 @@ export const PrivateRoute = () => {
     }, [auth?.token]);
 
     // Render the Outlet if authenticated, otherwise render LoginFirst
-    return ok ? <Outlet /> : <LoginFirst />;
+    return ok ? <Outlet /> : <VerifyLogin path=""/>;
 };

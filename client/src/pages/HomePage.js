@@ -9,7 +9,7 @@ function HomePage() {
         description="Welcome to Shopease, the ultimate student marketplace for all your needs."
         keywords="home, ecommerce, marketplace, mern project, Shopease"
       />
-      <div>HomePage Content</div>
+      <div className='home-container'>HomePage Content</div>
     </>
   );
 }

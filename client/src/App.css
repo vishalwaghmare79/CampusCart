@@ -39,7 +39,7 @@ body,
 .auth-button {
     display: inline-block;
     padding: 8px 24px;
-    border: 2px solid blue;
+    border: 1px solid blue;
     border-radius: 24px;
     background-color: transparent;
     color: blue;
@@ -53,6 +53,44 @@ body,
 .auth-button:active {
     background-color: #0505cf;
     color: white;
+}
+
+.user-dropdown {
+    position: relative;
+}
+
+.user-button {
+    background: none;
+    border: none;
+    color: #0b0202;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    min-width: 160px;
+    z-index: 1000;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-item {
+    padding: 12px 16px;
+    color: #333;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
 }
 
 .nav-links {
@@ -114,7 +152,6 @@ body,
         display: none;
     }
 
-    /* Bottom Navigation */
     .bottom-nav {
         display: flex;
         justify-content: space-around;
@@ -135,6 +172,8 @@ body,
         align-items: center;
         justify-content: center;
         color: black;
+        border: none;
+        background-color: transparent;
         text-decoration: none;
         font-size: 0.9rem;
     }
@@ -150,6 +189,31 @@ body,
 
     .bottom-nav-link:hover {
         color: #0505cf;
+    }
+
+    .mobile-dropdown-menu {
+        position: absolute;
+        bottom: 60px;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .mobile-dropdown-item {
+        padding: 12px 16px;
+        color: #333;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+    }
+
+    .mobile-dropdown-item:hover {
+        background-color: #f1f1f1;
     }
 }
 
@@ -275,6 +339,18 @@ form {
 
 /* form end  */
 
+/* home container */
+.home-container {
+    height: 100vh;
+}
+
+/* home container end */
+
+/* Admin Dashboard */
+
+  
+/* Admin Dashboard End */
+
 
 /* Spinner */
 .spinner-container {
@@ -395,6 +471,10 @@ form {
         flex-direction: column;
         margin: 60px auto;
         padding: 0;
+    }
+
+    .footer-item:last-child {
+        font-size: 12px;
     }
 }
 

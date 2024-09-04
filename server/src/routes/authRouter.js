@@ -11,10 +11,10 @@ router.post('/register', registerController);
 router.post('/login', loginController);
 
 // Route for verifying admin functionality - requires sign-in and admin access
-router.get('/admin/verify-admin', requireSignIn, isAdmin, adminAuthController);
+router.get('/verify-admin', requireSignIn, isAdmin, adminAuthController);
 
 // Route for verifying user authentication status
-router.get('/auth/verify-user', requireSignIn, userAuthController);
+router.get('/verify-user', requireSignIn, userAuthController);
 
 
 module.exports = router;

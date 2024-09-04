@@ -1,33 +1,43 @@
-import React from "react";
-import { NavLink,  } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import { toast } from "react-toastify";
 
 function Header() {
   const [auth, setAuth] = useAuth();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev);
+  };
+
+  const toggleMobileDropdown = () => {
+    setMobileDropdownOpen((prev) => !prev);
+  };
 
   const handleLogout = () => {
     setAuth({
       ...auth,
       user: null,
-      token: ''
+      token: "",
     });
-    localStorage.removeItem('auth');
+    localStorage.removeItem("auth");
     toast.success("Logout Successfully");
   };
 
   return (
     <>
-      <nav className="navbar">
+      <nav className="navbar wrapper">
         <h1 className="navbar-logo">
           <NavLink to="/">
             Shop<span>Ease</span>
           </NavLink>
         </h1>
-        
+
         <div>
           <ul className="nav-links">
-          <li className="nav-item">
+            <li className="nav-item">
               <NavLink to="/wishlist" className="nav-item-a">
                 <i className="nav-icon ri-heart-line"></i>
                 <span className="nav-icon-text">Wishlist</span>
@@ -39,38 +49,62 @@ function Header() {
                 <span className="nav-icon-text">Cart</span>
               </NavLink>
             </li>
-            <li className="nav-item">
-              {!auth.user ? (
+            <li className="nav-item user-dropdown">
+              {!auth?.user ? (
                 <>
-                  <NavLink 
-                    to="/register" 
-                    className={({ isActive }) => isActive ? "auth-button active" : "auth-button"}
+                  <NavLink
+                    to="/register"
+                    className={({ isActive }) =>
+                      isActive ? "auth-button active" : "auth-button"
+                    }
                   >
                     Register
                   </NavLink>
-                  <NavLink 
-                    to="/login" 
-                    className={({ isActive }) => isActive ? "auth-button active" : "auth-button"}
+                  <NavLink
+                    to="/login"
+                    className={({ isActive }) =>
+                      isActive ? "auth-button active" : "auth-button"
+                    }
                   >
                     Login
                   </NavLink>
                 </>
               ) : (
-                <NavLink 
-                  onClick={handleLogout} 
-                  to="/login" 
-                  className="auth-button"
-                >
-                  Logout
-                </NavLink>
+                <>
+                  <button onClick={toggleDropdown} className="user-button">
+                    {auth?.user?.name} <i className="ri-arrow-down-s-line"></i>
+                  </button>
+                  {dropdownOpen && (
+                    <ul className="dropdown-menu"
+                    onClick={()=>{
+                      setDropdownOpen(false)
+                    }}>
+                      <li>
+                        <NavLink
+                          to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
+                          className="dropdown-item"
+                        >
+                          Dashboard
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          onClick={handleLogout}
+                          to="/login"
+                          className="dropdown-item"
+                        >
+                          Logout
+                        </NavLink>
+                      </li>
+                    </ul>
+                  )}
+                </>
               )}
             </li>
-
-            
           </ul>
         </div>
       </nav>
-      
+
       {/* Bottom Navigation for Mobile */}
       <nav className="bottom-nav">
         <NavLink to="/" className="bottom-nav-link">
@@ -85,16 +119,39 @@ function Header() {
           <i className="ri-shopping-bag-line"></i>
           <span>Cart</span>
         </NavLink>
-        {!auth.user ? (
+        {!auth?.user ? (
           <NavLink to="/login" className="bottom-nav-link">
             <i className="ri-user-line"></i>
             <span>Login</span>
           </NavLink>
         ) : (
-          <NavLink onClick={handleLogout} to="/login" className="bottom-nav-link">
-            <i className="ri-logout-box-line"></i>
-            <span>Logout</span>
-          </NavLink>
+          <>
+            <button onClick={toggleMobileDropdown} className="bottom-nav-link">
+              <i className="ri-user-line"></i>
+              <span>{auth?.user?.name}</span>
+            </button>
+            {mobileDropdownOpen && (
+              <ul className="mobile-dropdown-menu">
+                <li>
+                  <NavLink
+                    to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
+                    className="mobile-dropdown-item"
+                  >
+                    Dashboard
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    onClick={handleLogout}
+                    to="/login"
+                    className="mobile-dropdown-item"
+                  >
+                    Logout
+                  </NavLink>
+                </li>
+              </ul>
+            )}
+          </>
         )}
       </nav>
     </>

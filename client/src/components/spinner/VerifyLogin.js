@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Spinner from './Spinner';
 
-function LoginFirst() {
+function VerifyLogin ({path = 'login'}) {
     const [count, setCount] = useState(3);
     const location = useLocation();
     const navigate = useNavigate();
@@ -14,13 +14,13 @@ function LoginFirst() {
         }, 1000);
 
         if (count === 0) {
-            navigate('/login', {
+            navigate(`/${path}`, {
                 state: location.pathname
             });
         }
 
         return () => clearInterval(interval); // Cleanup interval on unmount
-    }, [count, navigate, location]);
+    }, [count, navigate, location, path]);
 
     let heading = `Please log in first. Redirecting you in ${count} seconds...`
 
@@ -31,4 +31,4 @@ function LoginFirst() {
     );
 }
 
-export default LoginFirst;
+export default VerifyLogin;

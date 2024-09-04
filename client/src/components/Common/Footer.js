@@ -5,32 +5,29 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-item">
         <h4>Contact Us</h4>
-        <p><a href="tel:+18001234567">1800-123-4567</a></p>
+        <p><a href="tel:+918805232927">+91-8805232927</a></p>
       </div>
       <div className="footer-item">
         <h4>Support</h4>
-        <p><a href="https://www.shopeease.com/help">shopeease.com/help</a></p>
+        <p><a href="mailto:waghmarevishal438@gmail.com">waghmarevishal438@gmail.com</a></p>
       </div>
       <div className="footer-item">
         <h4>Get in Touch</h4>
-        <p><a href="mailto:support@shopeease.com">support@shopeease.com</a></p>
+        <p><a href="mailto:waghmarevishal438@gmail.com">waghmarevishal438@gmail.com</a></p>
       </div>
       <div className="footer-item social-icons">
-        <a href="https://www.facebook.com/shopeease" aria-label="Facebook">
-          <i className="ri-facebook-fill"></i>
+        <a href="https://www.linkedin.com/in/vishal-waghmare-708248189" aria-label="LinkedIn">
+          <i className="ri-linkedin-fill"></i>
         </a>
-        <a href="https://www.twitter.com/shopeease" aria-label="Twitter">
+        <a href="https://github.com/vishalwaghmare4" aria-label="GitHub">
+          <i className="ri-github-fill"></i>
+        </a>
+        <a href="https://twitter.com/vishalwaghmare_" aria-label="Twitter">
           <i className="ri-twitter-fill"></i>
-        </a>
-        <a href="https://www.instagram.com/shopeease" aria-label="Instagram">
-          <i className="ri-instagram-fill"></i>
         </a>
       </div>
       <div className="footer-item">
-        <p>
-          <a href="https://www.shopeease.com/terms-conditions">Terms & Conditions</a> -{' '}
-          <a href="https://www.shopeease.com/privacy-policy">Privacy Policy</a>
-        </p>
+        <p>Developed and Designed by Vishal Waghmare</p>
       </div>
     </footer>
   );

@@ -116,7 +116,8 @@ const loginController = async (req, res) => {
       user: {
         id: user._id, 
         name: user.name,
-        email: user.email, 
+        email: user.email,
+        role: user.role,
       },
       token, // JWT token
     });
@@ -132,23 +133,7 @@ const loginController = async (req, res) => {
 
 // Controller for handling admin authentication verification
 const adminAuthController = (req, res) => {
-  try {
-    const user = req.user; 
-    res.status(200).json({
-      message: "Protected route accessed successfully",
-      user: {
-        id: user._id, 
-      },
-    });
-  } catch (error) {
-    console.error("Error accessing protected route:", error.message);
-
-    // Handle any server-side errors that occur while accessing the protected route
-    res.status(500).json({
-      message: "Server error",
-      error: error.message,
-    });
-  }
+  res.status(200).json({ ok: true });
 };
 
 // Controller function to handle user authentication check

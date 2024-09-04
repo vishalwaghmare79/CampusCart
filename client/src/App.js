@@ -7,10 +7,17 @@ import Header from "./components/Common/Header";
 import Footer from "./components/Common/Footer";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-import Dashboard from "./pages/user/Dashboard";
-import { PrivateRoute } from "./Routes/Private";
+import Dashboard from "./pages/User/Dashboard";
 import Register from "./pages/Auth/Register";
-import Login from './pages/Auth/Login';
+import Login from "./pages/Auth/Login";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import CreateCategory from "./pages/Admin/CreateCategory";
+import CreateProduct from "./pages/User/CreateProduct";
+import Users from "./pages/Admin/Users";
+import Orders from "./pages/User/Orders";
+import Profile from "./pages/User/Profile";
+import { VerifyUserRoute } from "./Routes/VerifyUserRoute";
+import { VerifyAdminRoute } from "./Routes/VerifyAdminRoute";
 
 function App() {
   return (
@@ -20,9 +27,20 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/dashboard" element={<PrivateRoute />}>
-            <Route path="" element={<Dashboard />} />
+          
+          <Route element={<VerifyUserRoute />}>
+            <Route path="/dashboard/user" element={<Dashboard />} />
+            <Route path="/dashboard/user/create-product" element={<CreateProduct />} />
+            <Route path="/dashboard/user/orders" element={<Orders />} />
+            <Route path="/dashboard/user/Profile" element={<Profile />} />
           </Route>
+
+          <Route element={<VerifyAdminRoute />}>
+            <Route path="/dashboard/admin" element={<AdminDashboard />} />
+            <Route path="/dashboard/admin/create-category" element={<CreateCategory />} />
+            <Route path="/dashboard/admin/users" element={<Users />} />
+          </Route>
+          
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
