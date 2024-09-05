@@ -1,14 +1,14 @@
 import React from 'react'
 import UserMenu from './UserMenu'
 
-function Profile() {
+function Profile () {
   return (
-    <div className="admin-dashboard">
+    <div className="dashboard">
       <div className="sidebar">
         <UserMenu />
       </div>
       <div className="content">
-        <h1>profile</h1>
+        <h1>Welcome to the Dashboard</h1>
       </div>
     </div>
   )

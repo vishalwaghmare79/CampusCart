@@ -8,7 +8,7 @@ function Orders() {
         <UserMenu />
       </div>
       <div className="content">
-        <h1>Orders</h1>
+        <h1>Welcome to the Dashboard</h1>
       </div>
     </div>
   )

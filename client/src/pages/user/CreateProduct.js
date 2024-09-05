@@ -9,7 +9,6 @@ function CreateProduct() {
       </div>
       <div className="content">
         <h1>Sell Product</h1>
-        {/* Form for creating a product can go here */}
       </div>
     </div>
   );

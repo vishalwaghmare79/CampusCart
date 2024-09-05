@@ -4,22 +4,24 @@ import { NavLink } from "react-router-dom";
 function UserMenu () {
   return (
     <div className="sidebar-menu">
-      <h4 className="menu-title">Dashboard</h4>
+      <h4 className="menu-title"><NavLink 
+            to="/dashboard/user/" 
+          >
+            Dashboard
+          </NavLink></h4>
       <ul className="menu-list">
         <li className="menu-item">
           <NavLink 
             to="/dashboard/user/Profile" 
-            className="menu-link" 
-            activeClassName="active-link"
+            className={({ isActive }) => isActive ? "menu-link active-link" : "menu-link"}
           >
             Profile
           </NavLink>
         </li>
         <li className="menu-item">
-        <NavLink 
+          <NavLink 
             to="/dashboard/user/orders" 
-            className="menu-link" 
-            activeClassName="active-link"
+            className={({ isActive }) => isActive ? "menu-link active-link" : "menu-link"}
           >
             Orders
           </NavLink>
@@ -27,8 +29,7 @@ function UserMenu () {
         <li className="menu-item">
           <NavLink 
             to="/dashboard/user/create-product" 
-            className="menu-link" 
-            activeClassName="active-link"
+            className={({ isActive }) => isActive ? "menu-link active-link" : "menu-link"}
           >
             Sell Product
           </NavLink>
