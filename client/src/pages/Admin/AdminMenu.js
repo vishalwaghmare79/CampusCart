@@ -9,8 +9,7 @@ function AdminMenu() {
         <li className="menu-item">
           <NavLink 
             to="/dashboard/admin/create-category" 
-            className="menu-link" 
-            activeClassName="active-link"
+            className={({ isActive }) => isActive ? "menu-link active-link" : "menu-link"}
           >
             Create Category
           </NavLink>
@@ -18,8 +17,7 @@ function AdminMenu() {
         <li className="menu-item">
           <NavLink 
             to="/dashboard/admin/users" 
-            className="menu-link" 
-            activeClassName="active-link"
+            className={({ isActive }) => isActive ? "menu-link active-link" : "menu-link"}
           >
             Users
           </NavLink>

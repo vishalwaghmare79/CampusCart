@@ -21,7 +21,7 @@ const createCategoryController = async (req, res) => {
         const category = await new Category({ name, slug: slugify(name) }).save();
         res.status(201).send({
             success: true,
-            message: 'New category created',
+            message: `New ${name} category created`,
             category
         });
 
@@ -135,7 +135,7 @@ const deleteCategoryController = async (req, res) => {
 
         res.status(200).send({
             success: true,
-            message: "Category deleted successfully.",
+            message: `${category.name} deleted successfully.`,
         });
 
     } catch (error) {

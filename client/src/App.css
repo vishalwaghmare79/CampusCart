@@ -346,8 +346,47 @@ form {
 
 /* home container end */
 
-/* Admin Dashboard */
+/* Form Container Styling */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; 
+}
 
+/* Form Input Wrapper Styling */
+.form-input-wrapper {
+    margin-bottom: 20px;
+}
+
+/* Form Input Field Styling */
+.form-text-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Form Submit Button Styling */
+.form-submit-button {
+    padding: 10px 20px;
+    background-color: #0505cf;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    max-width: 100px;
+    transition: background-color 0.3s ease;
+}
+
+.form-submit-button:hover {
+    background-color: #3333ff;
+}
+
+
+/* Dashboard Styling */
 .dashboard {
     display: flex;
     min-height: 100vh;
@@ -360,11 +399,6 @@ form {
     background-color: #f1f1f1;
     width: 250px;
     padding: 20px;
-}
-
-.sidebar .menu-title {
-    font-size: 24px;
-    margin-bottom: 20px;
 }
 
 .sidebar .menu-title {
@@ -408,23 +442,100 @@ form {
 }
 
 .menu-link:hover::after {
-    background-color: #a399f7; 
+    background-color: #a399f7;
 }
 
 .active-link::after {
-    background-color: #0505cf; 
+    background-color: #0505cf;
 }
 
 /* Content Area Styling */
 .content {
     flex-grow: 1;
-    padding-left: 20px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.content-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.form-section {
+    margin-bottom: 25px;
+}
+
+.table-section {
+    margin-top: 20px;
+}
+
+/* Table Styling */
+.category-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+.category-table th, 
+.category-table td {
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.category-table th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+}
+
+.category-table td {
+    background-color: #fff;
+    vertical-align: middle;
+}
+
+.category-table tr:nth-child(even) {
+    background-color: #f9f9f9; 
+}
+
+/* Button Styling */
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    padding: 6px 16px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #45a049;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #e53935;
 }
 
 /* Responsive Media Queries */
 @media (max-width: 1200px) {
     .dashboard {
-        padding: 10px 64px; 
+        padding: 10px 64px;
     }
 }
 
@@ -449,6 +560,20 @@ form {
     .menu-link {
         font-size: 16px;
     }
+
+    .category-table th,
+    .category-table td {
+        font-size: 14px;
+    }
+
+    .content-title {
+        font-size: 24px;
+    }
+
+    .action-btn {
+        padding: 5px 12px;
+        font-size: 12px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -463,7 +588,16 @@ form {
     .menu-link {
         font-size: 14px;
     }
+
+    .content {
+        padding: 15px;
+    }
+
+    .content-title {
+        font-size: 20px;
+    }
 }
+
 
 /* Dashboard End */
 

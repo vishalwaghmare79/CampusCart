@@ -12,13 +12,8 @@ export const VerifyAdminRoute = () => {
         // Function to check user authentication
         const authCheck = async () => {
             try {
-                const res = await axios.get(`${process.env.REACT_APP_API}/api/v1/auth/verify-admin`, {
-                    headers: {
-                        "Authorization": `${auth?.token}`
-                    }
-                });                
+                const res = await axios.get(`${process.env.REACT_APP_API}/api/v1/auth/verify-admin`);                
                 setOk(res.data.ok);
-                console.log(res.data);
             } catch (error) {
                 console.error("Authentication check failed", error);
                 setOk(false);
