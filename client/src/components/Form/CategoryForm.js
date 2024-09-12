@@ -1,22 +1,24 @@
 import React from 'react';
 
-function CategoryForm({ handleSubmit, value, setValue }) {
+function CategoryForm({ handleSubmit, value, setValue, buttonName }) {
   return (
     <form onSubmit={handleSubmit} className="form-container">
-      <div className="form-input-wrapper">
+      <div className="form-section">
         <input
           type="text"
           id="categoryName"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          className="form-text-input"
+          className="custom-form-input"
           placeholder="Category Name"
           required
         />
       </div>
-      <button type="submit" className="form-submit-button">
-        Submit
-      </button>
+      <div className="form-section">
+        <button type="submit" className="form-dashboard-btn">
+          {buttonName}
+        </button>
+      </div>
     </form>
   );
 }

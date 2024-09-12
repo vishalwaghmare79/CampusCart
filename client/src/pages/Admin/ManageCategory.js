@@ -3,9 +3,9 @@ import AdminMenu from "./AdminMenu";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Button, Modal } from "antd";
-import CategoryForm from "./../../components/Form/CategoryForm";
+import CategoryForm from "../../components/Form/CategoryForm";
 
-function CreateCategory() {
+function ManageCategory () {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,7 +20,7 @@ function CreateCategory() {
       if (res.data?.success) {
         toast.success(res.data.message);
         getAllCategory();
-        setName(""); // Clear input after successful submission
+        setName(""); 
       } else {
         toast.error(res.data.message);
       }
@@ -69,6 +69,7 @@ function CreateCategory() {
       toast.error("Something went wrong while updating the category");
     }
   };
+
   // Delete category
   const handleDelete = async (id) => {
     try {
@@ -76,7 +77,7 @@ function CreateCategory() {
       const res = await axios.delete(API_BASE_URL);
       if (res.data.success) {
         toast.success(res.data.message);
-        getAllCategory(); // Refresh the categories list after deletion
+        getAllCategory();
       } else {
         toast.error(res.data.message);
       }
@@ -99,45 +100,36 @@ function CreateCategory() {
             handleSubmit={handleSubmit}
             value={name}
             setValue={setName}
+            buttonName="Create"
           />
         </div>
 
-        <div className="table-section">
-          <table className="category-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {categories?.map((category) => (
-                <tr key={category._id}>
-                  <td>{category.name}</td>
-                  <td className="actions">
-                    <Button
-                      type="primary"
-                      className="action-btn edit-btn"
-                      onClick={() => {
-                        setIsModalOpen(true);
-                        setUpdateName(category.name);
-                        setSelected(category);
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      type="danger"
-                      className="action-btn delete-btn"
-                      onClick={() => handleDelete(category._id)}
-                    >
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="categories-list">
+          {categories?.map((category) => (
+            <div key={category._id} className="category-item">
+              <div className="category-name">{category.name}</div>
+              <div className="category-actions">
+                <Button
+                  type="primary"
+                  className="update-button"
+                  onClick={() => {
+                    setIsModalOpen(true);
+                    setUpdateName(category.name);
+                    setSelected(category);
+                  }}
+                >
+                  Edit
+                </Button>
+                <Button
+                  type="danger"
+                  className="delete-button"
+                  onClick={() => handleDelete(category._id)}
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ))}
         </div>
 
         <Modal
@@ -150,6 +142,7 @@ function CreateCategory() {
             value={updateName}
             setValue={setUpdateName}
             handleSubmit={handleUpdate}
+            buttonName="Update"
           />
         </Modal>
       </div>
@@ -157,4 +150,4 @@ function CreateCategory() {
   );
 }
 
-export default CreateCategory;
+export default ManageCategory;

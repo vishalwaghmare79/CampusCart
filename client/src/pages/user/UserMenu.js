@@ -34,6 +34,14 @@ function UserMenu () {
             Sell Product
           </NavLink>
         </li>
+        <li className="menu-item">
+          <NavLink 
+            to="/dashboard/user/products" 
+            className={({ isActive }) => isActive ? "menu-link active-link" : "menu-link"}
+          >
+            Products
+          </NavLink>
+        </li>
       </ul>
     </div>
   );
