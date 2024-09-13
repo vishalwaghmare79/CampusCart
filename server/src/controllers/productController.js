@@ -61,6 +61,7 @@ const createProductController = async (req, res) => {
 
 // home page
 const getProductController = async (req, res) => {
+
   try {
     const products = await Product.find({}).populate('category').select("-image").limit(12).sort({createdAt: -1});
     res.status(200).send({
