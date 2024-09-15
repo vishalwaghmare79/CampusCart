@@ -19,6 +19,21 @@ const requireSignIn = (req, res, next) => {
     }
 };
 
+const verifyLogin = (req, res, next) => {
+    const token = req.header('Authorization');
+  
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        req.user = decoded;
+      } catch (error) {
+        console.log('Invalid token, proceeding without user.');
+      }
+    }
+    next(); 
+    
+  };
+
 // Middleware to check if the authenticated user is an admin
 const isAdmin = async (req, res, next) => {
     try {
@@ -38,4 +53,4 @@ const isAdmin = async (req, res, next) => {
     }
 };
 
-module.exports = { requireSignIn, isAdmin };
+module.exports = { requireSignIn, isAdmin, verifyLogin };

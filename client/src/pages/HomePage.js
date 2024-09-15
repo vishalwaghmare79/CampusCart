@@ -2,12 +2,19 @@ import React, { useState, useEffect } from "react";
 import DynamicHelmet from "../components/Common/DynamicHelmet";
 import axios from "axios";
 import { useAuth } from "../context/auth";
+import Spinner from "../components/spinner/Spinner";
 
 function HomePage() {
   const [products, setProducts] = useState([]);
   const [auth] = useAuth();
   const [categories, setCategories] = useState([]);
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [activeCategory, setActiveCategory] = useState({
+    name: "All",
+    id: null,
+  });
 
   // Get all categories
   const getAllCategory = async () => {
@@ -15,7 +22,7 @@ function HomePage() {
       const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/category/get-category`;
       const { data } = await axios.get(API_BASE_URL);
       if (data?.success) {
-        setCategories([{ name: "All" }, ...data.categories]);
+        setCategories([{ name: "All", _id: null }, ...data.categories]);
       }
     } catch (error) {
       console.log("Error fetching categories:", error);
@@ -30,27 +37,32 @@ function HomePage() {
 
   // Get all products
   const getAllProducts = async () => {
+    setLoading(true);
     try {
-      const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/get-products`;
+      const API_BASE_URL = `${
+        process.env.REACT_APP_API
+      }/api/v1/product/get-products?page=${page}&limit=10&category=${
+        activeCategory.id || ""
+      }`;
       const { data } = await axios.get(API_BASE_URL);
       setProducts(data.products);
+      setTotalPages(data.totalPages);
     } catch (error) {
       console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    getAllProducts();
-  }, []);
+    getAllProducts(); 
+  }, [activeCategory, page]); 
 
-  // Filter products based on activeCategory
-  const filteredProducts =
-    activeCategory === "All"
-      ? products
-      : products.filter(
-          (product) =>
-            product.category && product.category.name === activeCategory
-        );
+  useEffect(() => {
+    if (auth && auth.user) {
+      getAllProducts(); 
+    }
+  }, [auth]);
 
   return (
     <>
@@ -66,9 +78,14 @@ function HomePage() {
             <div
               key={category.name}
               className={`category ${
-                activeCategory === category.name ? "active" : ""
+                activeCategory.name === category.name ? "active" : ""
               }`}
-              onClick={() => setActiveCategory(category.name)}
+              onClick={() =>
+                setActiveCategory({
+                  name: category.name,
+                  id: category._id,
+                })
+              }
             >
               {category.name}
             </div>
@@ -76,31 +93,53 @@ function HomePage() {
         </div>
 
         <div className="products-section">
-          <h6 className="products-title">{activeCategory}</h6>
-          <div className="products-grid">
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map(
-                (item) =>
-                  auth?.user?.id !== item.createdBy && (
-                    <div key={item._id} className="homepage-product-card">
-                      <img
-                        className="homepage-product-image"
-                        src={`${imageBaseURL}/${item._id}`}
-                        alt={item?.name || "Product Image"}
-                      />
-                      <div className="homepage-product-details">
-                        <h5 className="homepage-product-name">{item?.name}</h5>
-                        <p className="homepage-product-description">
-                          {item?.description}
-                        </p>
-                        <button className="add-to-cart-btn">Add To Cart</button>
-                      </div>
-                    </div>
-                  )
-              )
-            ) : (
-              <p className="no-products">No products found</p>
-            )}
+          <h6 className="products-title">{activeCategory.name}</h6>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <div className="products-grid">
+              {products.map((item) => (
+                <div key={item._id} className="homepage-product-card">
+                  <img
+                    className="homepage-product-image"
+                    src={`${imageBaseURL}/${item._id}`}
+                    alt={item?.name || "Product Image"}
+                  />
+                  <div className="homepage-product-details">
+                    <h5 className="homepage-product-name">{item?.name}</h5>
+                    <p className="homepage-product-description">
+                      {item?.description}
+                    </p>
+                    <button className="add-to-cart-btn">Add To Cart</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="pagination-container">
+            <button
+              className="prev-btn"
+              onClick={() => {
+                if (page > 1) {
+                  setPage((prev) => prev - 1);
+                }
+              }}
+              disabled={page === 1}
+            >
+              Previous Page
+            </button>
+            <button
+              className="next-btn"
+              onClick={() => {
+                if (page < totalPages) {
+                  setPage((prev) => prev + 1);
+                }
+              }}
+              disabled={page === totalPages}
+            >
+              Next Page
+            </button>
           </div>
         </div>
       </div>

@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import UserMenu from "./UserMenu";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Products() {
   const [products, setProducts] = useState([]);
   const imageBaseURL = `${process.env.REACT_APP_API}/api/v1/product/product-image`;
-  const navigate = useNavigate();
 
   // Get all products
   const getAllProducts = async () => {

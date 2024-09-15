@@ -1,5 +1,5 @@
 const express = require('express');
-const { requireSignIn } = require('../middleware/authMidleware');
+const { requireSignIn, verifyLogin } = require('../middleware/authMidleware');
 const { createProductController, getProductController, getSingleProductController, productImageController, deleteProductController, updateProductController, getUserProductsController } = require('../controllers/productController');
 const formidable = require("express-formidable");
 
@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/create-product', requireSignIn, formidable(), createProductController);
 
 // Route to get all products excluding the logged-in user's products
-router.get('/get-products', getProductController);
+router.get('/get-products',verifyLogin, getProductController);
 
 router.get('/user-products',requireSignIn, getUserProductsController);
 

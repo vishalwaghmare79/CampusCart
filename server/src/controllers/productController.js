@@ -61,24 +61,54 @@ const createProductController = async (req, res) => {
 
 // home page
 const getProductController = async (req, res) => {
-
   try {
-    const products = await Product.find({}).populate('category').select("-image").limit(12).sort({createdAt: -1});
+    let filter = {};
+
+    // Exclude user's own products if they are logged in
+    if (req.user) {
+      const userId = req.user._id;
+      filter = { createdBy: { $ne: userId } };
+    }
+
+    // Apply category filter if provided
+    const category = req.query.category;
+    if (category) {
+      filter.category = category;      
+    }
+
+    // Parse page and limit, ensure they are positive integers
+    const page = Math.max(1, parseInt(req.query.page)) || 1; 
+    const limit = Math.max(1, parseInt(req.query.limit)) || 10; 
+
+    const products = await Product.find(filter)
+      .populate('category')
+      .select("-image")
+      .limit(limit)
+      .skip((page - 1) * limit) 
+      .sort({ createdAt: -1 }); 
+
+    const totalProducts = await Product.countDocuments(filter);
+
+    // Send response with pagination info
     res.status(200).send({
       success: true,
       message: "Products retrieved successfully",
-      totalProducts: products.length,
+      totalProducts,
+      page,
+      totalPages: Math.ceil(totalProducts / limit),
       products,
     });
   } catch (error) {
-    console.error("Error while retrieving products:", error);
+    console.error("Error while retrieving products:", error.message);
     res.status(500).send({
       success: false,
       message: "Error in retrieving products",
-      error,
+      error: error.message, 
     });
   }
 };
+
+
 
 // user dashboard
 const getUserProductsController = async (req, res) => {
