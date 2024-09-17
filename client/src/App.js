@@ -20,6 +20,8 @@ import { VerifyAdminRoute } from "./Routes/VerifyAdminRoute";
 import Products from "./pages/User/Products";
 import UpdateProduct from "./pages/User/UpdateProduct";
 import ManageCategory from "./pages/Admin/ManageCategory";
+import ProductDetails from "./pages/ProductDetails";
+import CartPage from "./pages/CartPage";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/product/:slug" element={<ProductDetails />} />
+          <Route path="/cart" element={<CartPage />} />
           
           <Route element={<VerifyUserRoute />}>
             <Route path="/dashboard/user" element={<Dashboard />} />

@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import { toast } from "react-toastify";
+import { useCart } from "../../context/cart";
+import { Badge } from "antd";
 
 function Header() {
   const [auth, setAuth] = useAuth();
+  const [cart] = useCart();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
 
@@ -40,13 +43,13 @@ function Header() {
             <li className="nav-item">
               <NavLink to="/wishlist" className="nav-item-a">
                 <i className="nav-icon ri-heart-line"></i>
-                <span className="nav-icon-text">Wishlist</span>
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink to="/cart" className="nav-item-a">
+                <Badge count={cart?.length} overflowCount={10}>
                 <i className="nav-icon ri-shopping-bag-line"></i>
-                <span className="nav-icon-text">Cart</span>
+                </Badge>
               </NavLink>
             </li>
             <li className="nav-item user-dropdown">
@@ -75,13 +78,17 @@ function Header() {
                     {auth?.user?.name} <i className="ri-arrow-down-s-line"></i>
                   </button>
                   {dropdownOpen && (
-                    <ul className="dropdown-menu"
-                    onClick={()=>{
-                      setDropdownOpen(false)
-                    }}>
+                    <ul
+                      className="dropdown-menu"
+                      onClick={() => {
+                        setDropdownOpen(false);
+                      }}
+                    >
                       <li>
                         <NavLink
-                          to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
+                          to={`/dashboard/${
+                            auth?.user?.role === 1 ? "admin" : "user"
+                          }`}
                           className="dropdown-item"
                         >
                           Dashboard
@@ -134,7 +141,9 @@ function Header() {
               <ul className="mobile-dropdown-menu">
                 <li>
                   <NavLink
-                    to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
+                    to={`/dashboard/${
+                      auth?.user?.role === 1 ? "admin" : "user"
+                    }`}
                     className="mobile-dropdown-item"
                   >
                     Dashboard

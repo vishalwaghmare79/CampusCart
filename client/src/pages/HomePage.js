@@ -3,10 +3,15 @@ import DynamicHelmet from "../components/Common/DynamicHelmet";
 import axios from "axios";
 import { useAuth } from "../context/auth";
 import Spinner from "../components/spinner/Spinner";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/cart";
+import { toast } from "react-toastify";
 
 function HomePage() {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [auth] = useAuth();
+  const [cart, setCart] = useCart();
   const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -33,8 +38,6 @@ function HomePage() {
     getAllCategory();
   }, []);
 
-  const imageBaseURL = `${process.env.REACT_APP_API}/api/v1/product/product-image`;
-
   // Get all products
   const getAllProducts = async () => {
     setLoading(true);
@@ -55,14 +58,16 @@ function HomePage() {
   };
 
   useEffect(() => {
-    getAllProducts(); 
-  }, [activeCategory, page]); 
+    getAllProducts();
+  }, [activeCategory, page]);
 
   useEffect(() => {
     if (auth && auth.user) {
-      getAllProducts(); 
+      getAllProducts();
     }
   }, [auth]);
+
+  const imageBaseURL = `${process.env.REACT_APP_API}/api/v1/product/product-image`;
 
   return (
     <>
@@ -100,18 +105,35 @@ function HomePage() {
             <div className="products-grid">
               {products.map((item) => (
                 <div key={item._id} className="homepage-product-card">
-                  <img
-                    className="homepage-product-image"
-                    src={`${imageBaseURL}/${item._id}`}
-                    alt={item?.name || "Product Image"}
-                  />
-                  <div className="homepage-product-details">
-                    <h5 className="homepage-product-name">{item?.name}</h5>
-                    <p className="homepage-product-description">
-                      {item?.description}
-                    </p>
-                    <button className="add-to-cart-btn">Add To Cart</button>
+                  <div
+                    className="product-navigater"
+                    onClick={() => {
+                      navigate(`/product/${item.slug}`);
+                    }}
+                  >
+                    <img
+                      className="homepage-product-image"
+                      src={`${imageBaseURL}/${item._id}`}
+                      alt={item?.name || "Product Image"}
+                    />
+                    <div className="homepage-product-details">
+                      <h5 className="homepage-product-name">{item?.name}</h5>
+                      <p className="homepage-product-description">
+                        {item?.description}
+                      </p>
+                    </div>
                   </div>
+                  <button
+                    className="add-to-cart-btn"
+                    onClick={() => {
+                      const updatedCart = [...cart, item]; 
+                      setCart(updatedCart); 
+                      localStorage.setItem("cart", JSON.stringify(updatedCart)); 
+                      toast.success(`${item.name} added to cart`); 
+                    }}
+                  >
+                    Add To Cart
+                  </button>
                 </div>
               ))}
             </div>

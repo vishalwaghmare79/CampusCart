@@ -118,6 +118,8 @@ const loginController = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        address: user.address,
+        phone: user.phone
       },
       token, // JWT token
     });
