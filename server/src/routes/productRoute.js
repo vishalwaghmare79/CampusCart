@@ -1,6 +1,6 @@
 const express = require('express');
 const { requireSignIn, verifyLogin } = require('../middleware/authMidleware');
-const { createProductController, getProductController, getSingleProductController, productImageController, deleteProductController, updateProductController, getUserProductsController } = require('../controllers/productController');
+const { createProductController, getProductController, getSingleProductController, productImageController, deleteProductController, updateProductController, getUserProductsController, braintreePaymentController, braintreeTokenController } = require('../controllers/productController');
 const formidable = require("express-formidable");
 
 const router = express.Router();
@@ -21,6 +21,12 @@ router.delete('/delete-product/:id', requireSignIn, deleteProductController);
 
 // Route to update a product (user can only update their own products)
 router.put('/update-product/:id', requireSignIn, formidable(), updateProductController);
+
+// Payment routes
+router.get('/braintree/client_token', braintreeTokenController)
+
+// purchase 
+router.post('/braintree/purchase', requireSignIn, braintreePaymentController)
 
 
 module.exports = router;

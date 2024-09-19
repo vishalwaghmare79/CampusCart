@@ -22,6 +22,7 @@ import UpdateProduct from "./pages/User/UpdateProduct";
 import ManageCategory from "./pages/Admin/ManageCategory";
 import ProductDetails from "./pages/ProductDetails";
 import CartPage from "./pages/CartPage";
+import ManageOrder from "./pages/Admin/ManageOrder";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
           <Route element={<VerifyAdminRoute />}>
             <Route path="/dashboard/admin" element={<AdminDashboard />} />
             <Route path="/dashboard/admin/manage-category" element={<ManageCategory />} />
+            <Route path="/dashboard/admin/manage-orders" element={<ManageOrder />} />
             <Route path="/dashboard/admin/users" element={<Users />} />
           </Route>
           

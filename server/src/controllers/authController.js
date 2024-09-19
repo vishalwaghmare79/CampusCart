@@ -1,4 +1,5 @@
 const { User } = require("../models/userSchema.Model");
+const { Order } = require("../models/orderSchema.Model");
 const { hashPassword, comparePassword } = require("../helpers/authHelper");
 const JWT = require("jsonwebtoken");
 
@@ -143,6 +144,72 @@ const userAuthController = (req, res) => {
   res.status(200).json({ ok: true });
 };
 
-module.exports = { registerController, loginController, adminAuthController, userAuthController };
+// Get user Orders Controller
+const getOrdersController = async (req, res) => {
+  try {
+    const orders = await Order.find({ buyer: req.user._id })
+      .populate("products", "-image")
+      .populate("buyer", "name");
+    
+    res.json(orders);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: 'Error while getting orders',
+      error,
+    });
+  }
+};
+
+// Get All Orders Controller
+const getAllOrdersController = async (req, res) => {
+  try {
+    const orders = await Order.find({})
+      .populate("products", "-image")
+      .populate("buyer", "name")
+      .sort({ createdAt: -1 });
+    
+    res.json(orders);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: 'Error while getting orders',
+      error,
+    });
+  }
+};
+
+// order status controller 
+const orderStatusController = async (req, res) => {
+  try {
+    const { orderId } = req.params; 
+    const { status } = req.body; 
+    
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId, 
+      { status }, 
+      { new: true } 
+    );
+    
+    res.status(200).send({
+      success: true,
+      message: 'Order updated successfully',
+      order: updatedOrder 
+    });
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: 'Error while updating order',
+      error
+    });
+  }
+};
+
+
+module.exports = { registerController, loginController, adminAuthController, userAuthController, getOrdersController, getAllOrdersController, orderStatusController };
 
 
