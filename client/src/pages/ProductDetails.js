@@ -6,18 +6,21 @@ import Spinner from "../components/spinner/Spinner";
 function ProductDetails() {
   const params = useParams();
   const [product, setProduct] = useState({});
+  const [productId, setProductId] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (params?.slug) getProduct();
-  }, [params?.slug]);
+    if (params?.productId) 
+      getProduct();
+  }, [params?.productId]);
 
   const getProduct = async () => {
     setLoading(true);
     try {
-      const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/get-product/${params.slug}`;
+      const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/get-product/${params.productId}`;
       const { data } = await axios.get(API_BASE_URL);
       setProduct(data?.product);
+      setProductId(data?.product?._id)
     } catch (error) {
       console.log(error);
     } finally {
@@ -33,7 +36,7 @@ function ProductDetails() {
         <div className="product-img-section">
           <img
             className="product-img"
-            src={`${imageBaseURL}/${product?._id}`}
+            src={`${imageBaseURL}/${productId}`}
             alt={product?.name || "Product Image"}
           />
         </div>

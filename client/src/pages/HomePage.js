@@ -6,9 +6,11 @@ import Spinner from "../components/spinner/Spinner";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/cart";
 import { toast } from "react-toastify";
+import { useWishlist } from "../context/wishlist";
 
 function HomePage() {
   const navigate = useNavigate();
+  const { addToWishlist } = useWishlist();
   const [products, setProducts] = useState([]);
   const [auth] = useAuth();
   const [cart, setCart] = useCart();
@@ -108,7 +110,7 @@ function HomePage() {
                   <div
                     className="product-navigater"
                     onClick={() => {
-                      navigate(`/product/${item.slug}`);
+                      navigate(`/product/${item._id}`);
                     }}
                   >
                     <img
@@ -123,17 +125,34 @@ function HomePage() {
                       </p>
                     </div>
                   </div>
-                  <button
-                    className="add-to-cart-btn"
-                    onClick={() => {
-                      const updatedCart = [...cart, item]; 
-                      setCart(updatedCart); 
-                      localStorage.setItem("cart", JSON.stringify(updatedCart)); 
-                      toast.success(`${item.name} added to cart`); 
-                    }}
-                  >
-                    Add To Cart
-                  </button>
+                  <div className="homepage-product-cardBtn">
+                    <button
+                      className="add-to-cart-btn"
+                      onClick={() => {
+                        const updatedCart = [...cart, item];
+                        setCart(updatedCart);
+                        localStorage.setItem(
+                          "cart",
+                          JSON.stringify(updatedCart)
+                        );
+                        toast.success(`${item.name} added to cart`);
+                      }}
+                    >
+                      Add To Cart
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (!auth?.user) {
+                          navigate("/login", { state: "/" }); 
+                        } else {
+                          addToWishlist(item);
+                        }
+                      }}
+                      className="wishlist-btn"
+                    >
+                      <i className="ri-heart-line wishlist"></i>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

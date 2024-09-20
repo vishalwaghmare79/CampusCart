@@ -1,5 +1,5 @@
 const express = require('express');
-const { requireSignIn, verifyLogin } = require('../middleware/authMidleware');
+const { requireSignIn, verifyLogin } = require('../middleware/authMiddleware');
 const { createProductController, getProductController, getSingleProductController, productImageController, deleteProductController, updateProductController, getUserProductsController, braintreePaymentController, braintreeTokenController } = require('../controllers/productController');
 const formidable = require("express-formidable");
 
@@ -13,7 +13,7 @@ router.get('/get-products',verifyLogin, getProductController);
 
 router.get('/user-products',requireSignIn, getUserProductsController);
 
-router.get('/get-product/:slug', getSingleProductController);
+router.get('/get-product/:productId', getSingleProductController);
 router.get('/product-image/:id', productImageController);
 
 // Route to delete a product (user can only delete their own products)

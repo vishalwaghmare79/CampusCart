@@ -60,7 +60,7 @@ function Products() {
                 <p className="product-description">{item?.description}</p>
               </div>
               <div className="product-actions">
-                <Link to={`/dashboard/user/products/${item.slug}`} className="update-link">
+                <Link to={`/dashboard/user/products/${item._id}`} className="update-link">
                   <button className="update-button">Update</button>
                 </Link>
                 <button className="delete-button" onClick={() => handleDelete(item._id)}>Delete</button>

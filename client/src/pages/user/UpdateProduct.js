@@ -23,10 +23,11 @@ function UpdateProduct() {
     const [id, setId] = useState('')
 
     const getSingleProduct = async () => {
-        try {
-            const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/get-product/${params.slug}`;
-            const { data } = await axios.get(API_BASE_URL);
-            setId(data.product._id)
+        try {                  
+            const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/get-product/${params.productId}`;
+            const { data } = await axios.get(API_BASE_URL);  
+            console.log(data);        
+            setId(data.product._id)                        
             setName(data.product.name)
             setDescription(data.product.description)
             setPrice(data.product.price)

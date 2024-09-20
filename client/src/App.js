@@ -23,6 +23,7 @@ import ManageCategory from "./pages/Admin/ManageCategory";
 import ProductDetails from "./pages/ProductDetails";
 import CartPage from "./pages/CartPage";
 import ManageOrder from "./pages/Admin/ManageOrder";
+import WishlistPage from "./pages/WishlistPage";
 
 function App() {
   return (
@@ -32,13 +33,14 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/product/:slug" element={<ProductDetails />} />
+          <Route path="/product/:productId" element={<ProductDetails />} />
           <Route path="/cart" element={<CartPage />} />
           
           <Route element={<VerifyUserRoute />}>
+            <Route path="/user/wishlist" element={<WishlistPage />} />
             <Route path="/dashboard/user" element={<Dashboard />} />
             <Route path="/dashboard/user/create-product" element={<CreateProduct />} />
-            <Route path="/dashboard/user/products/:slug" element={<UpdateProduct />} />
+            <Route path="/dashboard/user/products/:productId" element={<UpdateProduct />} />
             <Route path="/dashboard/user/products" element={<Products />} />
             <Route path="/dashboard/user/orders" element={<Orders />} />
             <Route path="/dashboard/user/Profile" element={<Profile />} />

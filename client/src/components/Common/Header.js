@@ -4,13 +4,15 @@ import { useAuth } from "../../context/auth";
 import { toast } from "react-toastify";
 import { useCart } from "../../context/cart";
 import { Badge } from "antd";
+import { useWishlist } from "../../context/wishlist";
 
 function Header() {
   const [auth, setAuth] = useAuth();
-  const [cart] = useCart();
+  const [cart, setCart] = useCart();
+  const {wishlist} = useWishlist();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
-
+  
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
   };
@@ -25,7 +27,9 @@ function Header() {
       user: null,
       token: "",
     });
-    localStorage.removeItem("auth");
+    localStorage.removeItem('auth');
+    setCart([])
+    localStorage.removeItem('cart');
     toast.success("Logout Successfully");
   };
 
@@ -41,13 +45,15 @@ function Header() {
         <div>
           <ul className="nav-links">
             <li className="nav-item">
-              <NavLink to="/wishlist" className="nav-item-a">
+              <NavLink to="/user/wishlist" className="nav-item-a">
+              <Badge count={wishlist?.length} overflowCount={5}>
                 <i className="nav-icon ri-heart-line"></i>
+                </Badge>
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink to="/cart" className="nav-item-a">
-                <Badge count={cart?.length} overflowCount={10}>
+                <Badge count={cart?.length} overflowCount={5}>
                 <i className="nav-icon ri-shopping-bag-line"></i>
                 </Badge>
               </NavLink>
@@ -118,7 +124,7 @@ function Header() {
           <i className="ri-home-line"></i>
           <span>Home</span>
         </NavLink>
-        <NavLink to="/wishlist" className="bottom-nav-link">
+        <NavLink to="/user/wishlist" className="bottom-nav-link">
           <i className="ri-heart-line"></i>
           <span>Wishlist</span>
         </NavLink>

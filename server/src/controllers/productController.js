@@ -151,17 +151,11 @@ const getUserProductsController = async (req, res) => {
 
 const getSingleProductController = async (req, res) => {
   try {
-    const { id } = req.params;
-    const product = await Product.findOne({ slug: req.params.slug })
+    const { productId } = req.params;
+    
+    const product = await Product.findOne({ _id: productId })
+      .populate("category")
       .select("-image")
-      .populate("category");
-
-    if (!product) {
-      return res.status(404).send({
-        success: false,
-        message: "Product not found",
-      });
-    }
 
     res.status(200).send({
       success: true,
@@ -180,7 +174,7 @@ const getSingleProductController = async (req, res) => {
 
 // Get photo
 const productImageController = async (req, res) => {
-  try {
+  try {    
     const product = await Product.findById(req.params.id).select("image");
     if (product && product.image && product.image.data) {
       res.set("Content-Type", product.image.contentType);

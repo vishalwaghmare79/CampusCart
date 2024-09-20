@@ -148,8 +148,4 @@ const deleteCategoryController = async (req, res) => {
     }
 };
 
-module.exports = { deleteCategoryController };
-
-
-
 module.exports = { createCategoryController, updateCategoryController, categoryController, singleCategoryController, deleteCategoryController };
