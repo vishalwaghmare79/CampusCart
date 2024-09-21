@@ -38,7 +38,7 @@ function Header() {
       <nav className="navbar wrapper">
         <h1 className="navbar-logo">
           <NavLink to="/">
-            Shop<span>Ease</span>
+          Campus<span>Cart</span>
           </NavLink>
         </h1>
 
