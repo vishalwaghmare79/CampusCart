@@ -17,9 +17,7 @@ function VerifyLogin({ path = 'login' }) {
     }, [navigate, location, path]);
 
     return (
-        <div className="loginfirst-container">
             <Spinner />
-        </div>
     );
 }
 

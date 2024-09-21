@@ -9,10 +9,10 @@ import { useWishlist } from "../../context/wishlist";
 function Header() {
   const [auth, setAuth] = useAuth();
   const [cart, setCart] = useCart();
-  const {wishlist} = useWishlist();
+  const { wishlist } = useWishlist();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
-  
+
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
   };
@@ -27,9 +27,9 @@ function Header() {
       user: null,
       token: "",
     });
-    localStorage.removeItem('auth');
-    setCart([])
-    localStorage.removeItem('cart');
+    localStorage.removeItem("auth");
+    setCart([]);
+    localStorage.removeItem("cart");
     toast.success("Logout Successfully");
   };
 
@@ -45,57 +45,55 @@ function Header() {
         <div>
           <ul className="nav-links">
             <li className="nav-item">
-              <NavLink to="/user/wishlist" className="nav-item-a">
-              <Badge count={wishlist?.length} overflowCount={5}>
-                <i className="nav-icon ri-heart-line"></i>
-                </Badge>
+              <NavLink to="/" className="nav-item-a" activeClassName="active">
+                Home
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/cart" className="nav-item-a">
-                <Badge count={cart?.length} overflowCount={5}>
-                <i className="nav-icon ri-shopping-bag-line"></i>
+              <NavLink to="/user/wishlist" className="nav-item-a" activeClassName="active">
+                <Badge count={wishlist?.length} overflowCount={5}>
+                  <i className="nav-icon ri-heart-line"></i>
                 </Badge>
+                  <span>wishlist</span>
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/cart" className="nav-item-a" activeClassName="active">
+                <Badge count={cart?.length} overflowCount={5}>
+                  <i className="nav-icon ri-shopping-bag-line"></i>
+                </Badge>
+                  <span>cart</span>
               </NavLink>
             </li>
             <li className="nav-item user-dropdown">
               {!auth?.user ? (
                 <>
-                  <NavLink
-                    to="/register"
-                    className={({ isActive }) =>
-                      isActive ? "auth-button active" : "auth-button"
-                    }
-                  >
+                  <NavLink to="/register" className="auth-button" activeClassName="active">
                     Register
                   </NavLink>
-                  <NavLink
-                    to="/login"
-                    className={({ isActive }) =>
-                      isActive ? "auth-button active" : "auth-button"
-                    }
-                  >
+                  <NavLink to="/login" className="auth-button" activeClassName="active">
                     Login
                   </NavLink>
                 </>
               ) : (
                 <>
                   <button onClick={toggleDropdown} className="user-button">
-                    {auth?.user?.name} <i className="ri-arrow-down-s-line"></i>
+                    <i className="nav-icon ri-user-line"></i>
+                    <span>
+                      {auth?.user?.name} <i className="ri-arrow-down-s-line"></i>
+                    </span>
                   </button>
+
                   {dropdownOpen && (
                     <ul
                       className="dropdown-menu"
-                      onClick={() => {
-                        setDropdownOpen(false);
-                      }}
+                      onClick={() => setDropdownOpen(false)}
                     >
                       <li>
                         <NavLink
-                          to={`/dashboard/${
-                            auth?.user?.role === 1 ? "admin" : "user"
-                          }`}
+                          to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
                           className="dropdown-item"
+                          activeClassName="active"
                         >
                           Dashboard
                         </NavLink>
@@ -105,6 +103,7 @@ function Header() {
                           onClick={handleLogout}
                           to="/login"
                           className="dropdown-item"
+                          activeClassName="active"
                         >
                           Logout
                         </NavLink>
@@ -120,20 +119,20 @@ function Header() {
 
       {/* Bottom Navigation for Mobile */}
       <nav className="bottom-nav">
-        <NavLink to="/" className="bottom-nav-link">
+        <NavLink to="/" className="bottom-nav-link" activeClassName="active">
           <i className="ri-home-line"></i>
           <span>Home</span>
         </NavLink>
-        <NavLink to="/user/wishlist" className="bottom-nav-link">
+        <NavLink to="/user/wishlist" className="bottom-nav-link" activeClassName="active">
           <i className="ri-heart-line"></i>
           <span>Wishlist</span>
         </NavLink>
-        <NavLink to="/cart" className="bottom-nav-link">
+        <NavLink to="/cart" className="bottom-nav-link" activeClassName="active">
           <i className="ri-shopping-bag-line"></i>
           <span>Cart</span>
         </NavLink>
         {!auth?.user ? (
-          <NavLink to="/login" className="bottom-nav-link">
+          <NavLink to="/login" className="bottom-nav-link" activeClassName="active">
             <i className="ri-user-line"></i>
             <span>Login</span>
           </NavLink>
@@ -147,10 +146,9 @@ function Header() {
               <ul className="mobile-dropdown-menu">
                 <li>
                   <NavLink
-                    to={`/dashboard/${
-                      auth?.user?.role === 1 ? "admin" : "user"
-                    }`}
+                    to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
                     className="mobile-dropdown-item"
+                    activeClassName="active"
                   >
                     Dashboard
                   </NavLink>
@@ -160,6 +158,7 @@ function Header() {
                     onClick={handleLogout}
                     to="/login"
                     className="mobile-dropdown-item"
+                    activeClassName="active"
                   >
                     Logout
                   </NavLink>

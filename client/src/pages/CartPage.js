@@ -53,20 +53,22 @@ function CartPage() {
   // handle payment
   const handlePayment = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const { nonce } = await instance.requestPaymentMethod();
       const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/braintree/purchase`;
       const { data } = await axios.post(API_BASE_URL, {
-        cart,nonce,total
+        cart,
+        nonce,
+        total,
       });
-      localStorage.removeItem('cart')
-      setCart([])
-      navigate('/dashboard/user/orders')
-      toast.success('Payment Successfully')
+      localStorage.removeItem("cart");
+      setCart([]);
+      navigate("/dashboard/user/orders");
+      toast.success("Payment Successfully");
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -77,18 +79,27 @@ function CartPage() {
       <div className="cart-items-section">
         {Array.isArray(cart) && cart.length > 0 ? (
           cart.map((item) => (
-            <div key={item._id} className="cart-item">
-              <img
-                className="homepage-product-image"
-                src={`${imageBaseURL}/${item._id}`}
-                alt={item?.name || "Product Image"}
-              />
-              <div className="cart-item-details">
-                <h5 className="cart-item-name">{item.name}</h5>
-                <p className="cart-item-description">
-                  {item.description.substring(0, 20)}
-                </p>
-                <p className="cart-item-price">₹{item.price}</p>
+            <div key={item._id} className="homepage-product-card">
+              <div
+                className="product-navigater"
+                onClick={() => {
+                  navigate(`/product/${item._id}`);
+                }}
+              >
+                <img
+                  className="homepage-product-image"
+                  src={`${imageBaseURL}/${item._id}`}
+                  alt={item?.name || "Product Image"}
+                />
+                <div className="homepage-product-details">
+                  <h5 className="homepage-product-name">{item.name}</h5>
+                  <p className="homepage-product-description">
+                    {item.description.substring(0, 20)}
+                  </p>
+                  <p className="homepage-product-price">₹{item.price}</p>
+                </div>
+              </div>
+              <div className="homepage-product-cardBtn">
                 <button
                   className="cart-item-remove-btn"
                   onClick={() => removeCartItem(item._id)}
@@ -99,7 +110,7 @@ function CartPage() {
             </div>
           ))
         ) : (
-          <p>Your cart is empty.</p>
+          <p className="no-products-message">Your cart is empty.</p>
         )}
       </div>
 
@@ -118,9 +129,13 @@ function CartPage() {
                     onInstance={(instance) => setInstance(instance)}
                   />
                 )}
-                {loading ? (<Spinner />) : (<button className="checkout-btn" onClick={handlePayment}>
-                  Make Payment
-                </button>)}
+                {loading ? (
+                  <Spinner />
+                ) : (
+                  <button className="checkout-btn" onClick={handlePayment}>
+                    Make Payment
+                  </button>
+                )}
               </>
             ) : (
               <button

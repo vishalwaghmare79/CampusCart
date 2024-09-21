@@ -1,0 +1,145 @@
+.cart-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 125px;
+    gap: 20px;
+    height: auto;
+    min-height: 100vh;
+}
+
+.cart-items-section {
+    flex: 2;
+}
+
+.cart-summary-section {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.cart-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.cart-item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cart-item-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.cart-item-description {
+    font-size: 14px;
+    color: #666;
+}
+
+.cart-item-price {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.cart-item-remove-btn {
+    background-color: #ff4d4f;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    max-width: 100px;
+}
+
+.cart-item-remove-btn:hover {
+    background-color: #ff7875;
+}
+
+.cart-summary-section h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.cart-summary-section h4 {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.cart-total-section {
+    margin-top: 20px;
+}
+
+.cart-total-price {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.checkout-btn {
+    width: 100%;
+    background-color: #2d39c3;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.checkout-btn:hover {
+    background-color: #2531a5;
+}
+
+@media (max-width: 768px) {
+    .cart-container {
+        flex-direction: column;
+        padding: 10px 0;
+    }
+
+    .cart-items-section,
+    .cart-summary-section {
+        width: 100%;
+    }
+
+    .cart-item-name {
+        font-size: 14px;
+    }
+
+    .cart-item-description {
+        font-size: 12px;
+    }
+
+    .cart-item-price {
+        font-size: 14px;
+    }
+
+    .cart-summary-section h1 {
+        font-size: 18px;
+    }
+
+    .cart-summary-section h4 {
+        font-size: 16px;
+    }
+
+    .checkout-btn {
+        font-size: 14px;
+    }
+}

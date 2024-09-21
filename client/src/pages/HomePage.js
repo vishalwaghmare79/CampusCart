@@ -79,7 +79,7 @@ function HomePage() {
         keywords="home, ecommerce, marketplace, mern project, Shopease"
       />
       <div className="home-container">
-        <h2 className="home-category-title">Explore Categories</h2>
+        <h2 className="home-title">Explore Categories</h2>
         <div className="home-nav-container">
           {categories.map((category) => (
             <div
@@ -100,9 +100,11 @@ function HomePage() {
         </div>
 
         <div className="products-section">
-          <h6 className="products-title">{activeCategory.name}</h6>
+          <h6 className="home-title">{activeCategory.name}</h6>
           {loading ? (
             <Spinner />
+          ) : products.length === 0 ? (
+            <p className="no-products-message">No products available.</p>
           ) : (
             <div className="products-grid">
               {products.map((item) => (
@@ -123,6 +125,7 @@ function HomePage() {
                       <p className="homepage-product-description">
                         {item?.description}
                       </p>
+                      <p className="homepage-product-price">₹{item.price}</p>
                     </div>
                   </div>
                   <div className="homepage-product-cardBtn">
@@ -143,7 +146,7 @@ function HomePage() {
                     <button
                       onClick={() => {
                         if (!auth?.user) {
-                          navigate("/login", { state: "/" }); 
+                          navigate("/login", { state: "/" });
                         } else {
                           addToWishlist(item);
                         }
@@ -158,30 +161,32 @@ function HomePage() {
             </div>
           )}
 
-          <div className="pagination-container">
-            <button
-              className="prev-btn"
-              onClick={() => {
-                if (page > 1) {
-                  setPage((prev) => prev - 1);
-                }
-              }}
-              disabled={page === 1}
-            >
-              Previous Page
-            </button>
-            <button
-              className="next-btn"
-              onClick={() => {
-                if (page < totalPages) {
-                  setPage((prev) => prev + 1);
-                }
-              }}
-              disabled={page === totalPages}
-            >
-              Next Page
-            </button>
-          </div>
+          {totalPages > 1 && (
+            <div className="pagination-container">
+              <button
+                className="prev-btn"
+                onClick={() => {
+                  if (page > 1) {
+                    setPage((prev) => prev - 1);
+                  }
+                }}
+                disabled={page === 1}
+              >
+                Previous Page
+              </button>
+              <button
+                className="next-btn"
+                onClick={() => {
+                  if (page < totalPages) {
+                    setPage((prev) => prev + 1);
+                  }
+                }}
+                disabled={page === totalPages}
+              >
+                Next Page
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
