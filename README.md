@@ -1,5 +1,3 @@
----
-
 # CampusCart
 
 **CampusCart** is an E-commerce platform specifically designed for students to buy and sell used items like books, gadgets, and equipment. The goal is to promote sustainability by allowing students to pass on their items to juniors, fostering a community-driven marketplace within educational institutions. This project is a demonstration of my full-stack development skills, with a focus on user experience and functional efficiency.
@@ -131,5 +129,3 @@ CampusCart/
 ## Why This Project?
 
 CampusCart is a reflection of my technical skills and ability to think through real-world problems. The project emphasizes my strengths in frontend and backend development, and it's designed to be practical and user-friendly. It’s a project I am proud to showcase as part of my portfolio for future employment.
-
----
