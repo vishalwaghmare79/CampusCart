@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { Button, Modal } from "antd";
 import CategoryForm from "../../components/Form/CategoryForm";
+import DynamicHelmet from "../../components/Common/DynamicHelmet";
 
 function ManageCategory () {
   const [categories, setCategories] = useState([]);
@@ -88,6 +89,12 @@ function ManageCategory () {
   };
 
   return (
+   <>
+    <DynamicHelmet
+      title="Manage Categories - Admin Dashboard | CampusCart"
+      description="Efficiently manage and organize product categories on the CampusCart admin dashboard. Ensure smooth navigation for users in the student marketplace."
+      keywords="admin, manage categories, CampusCart, category management, product categories, student marketplace"
+    />
     <div className="dashboard">
       <div className="sidebar">
         <AdminMenu />
@@ -147,6 +154,7 @@ function ManageCategory () {
         </Modal>
       </div>
     </div>
+   </>
   );
 }
 

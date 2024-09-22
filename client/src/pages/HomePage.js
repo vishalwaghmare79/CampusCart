@@ -74,9 +74,9 @@ function HomePage() {
   return (
     <>
       <DynamicHelmet
-        title="Home Page - Shopease E-Commerce"
-        description="Welcome to Shopease, the ultimate student marketplace for all your needs."
-        keywords="home, ecommerce, marketplace, mern project, Shopease"
+        title="Home Page - CampusCart"
+        description="Welcome to CampusCart, the ultimate student marketplace for all your needs."
+        keywords="home, ecommerce, marketplace, mern project, CampusCart"
       />
       <div className="home-container">
         <h2 className="home-title">Explore Categories</h2>
@@ -123,7 +123,11 @@ function HomePage() {
                     <div className="homepage-product-details">
                       <h5 className="homepage-product-name">{item?.name}</h5>
                       <p className="homepage-product-description">
-                        {item?.description}
+                        <p>
+                          {item?.description?.length > 35
+                            ? `${item.description.slice(0, 35)}...`
+                            : item.description}
+                        </p>
                       </p>
                       <p className="homepage-product-price">₹{item.price}</p>
                     </div>
@@ -132,13 +136,15 @@ function HomePage() {
                     <button
                       className="add-to-cart-btn"
                       onClick={() => {
-                        const updatedCart = [...cart, item];
-                        setCart(updatedCart);
-                        localStorage.setItem(
-                          "cart",
-                          JSON.stringify(updatedCart)
-                        );
-                        toast.success(`${item.name} added to cart`);
+                        const itemExists = cart.some(cartItem => cartItem._id === item._id);
+                        if (itemExists) {
+                          toast.info(`${item.name} is already in your cart`);
+                        } else {
+                          const updatedCart = [...cart, item];
+                          setCart(updatedCart);
+                          localStorage.setItem("cart", JSON.stringify(updatedCart));
+                          toast.success(`${item.name} added to cart`);
+                        }
                       }}
                     >
                       Add To Cart

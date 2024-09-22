@@ -3,19 +3,25 @@ import UserMenu from "./UserMenu";
 import { useAuth } from "../../context/auth";
 import axios from "axios";
 import moment from 'moment';
+import DynamicHelmet from "../../components/Common/DynamicHelmet";
+import Spinner from "../../components/spinner/Spinner";
 
 
 function Orders() {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [auth] = useAuth(); 
 
   const getOrders = async () => {
     try {
+      setLoading(true)
       const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/auth/orders`;
       const { data } = await axios.get(API_BASE_URL);
       setOrders(data);
     } catch (error) {
       console.error("Error fetching orders:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -28,6 +34,12 @@ function Orders() {
   const imageBaseURL = `${process.env.REACT_APP_API}/api/v1/product/product-image`;
 
   return (
+   <>
+     <DynamicHelmet
+      title="Track Orders - CampusCart"
+      description="Monitor and track your orders on CampusCart. Stay updated on the status of your purchases and sales."
+      keywords="track orders, order status, CampusCart, student marketplace, order management"
+    />
     <div className="dashboard">
       <div className="sidebar">
         <UserMenu />
@@ -45,7 +57,7 @@ function Orders() {
             <th>Quantity</th>
           </tr>
         </thead>
-        <tbody>
+        {loading ? <Spinner /> : (<tbody>
           {orders.map((order, i) => (
             <tr key={order._id}>
               <td>{i + 1}</td>
@@ -67,11 +79,12 @@ function Orders() {
               <td>{order.products.length}</td>
             </tr>
           ))}
-        </tbody>
+        </tbody>)}
       </table>
     </div>
 
     </div>
+   </>
   );
 }
 

@@ -1,9 +1,9 @@
 import React from "react";
-import Spinner from "../components/spinner/Spinner";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/cart";
 import { toast } from "react-toastify";
 import { useWishlist } from "../context/wishlist";
+import DynamicHelmet from "../components/Common/DynamicHelmet";
 
 const WishlistPage = () => {
   const { wishlist, removeFromWishlist } = useWishlist();
@@ -13,22 +13,21 @@ const WishlistPage = () => {
   const imageBaseURL = `${process.env.REACT_APP_API}/api/v1/product/product-image`;
 
   return (
-    <div className="home-container">
-      <div className="products-section">
-        {wishlist?.length === 0 ? (
-          <p className="no-products-message">Your wishlist is empty.</p>
-        ) : (
-          <div className="products-grid">
-            {wishlist.map(
-              (
-                item 
-              ) => (
+    <>
+      <DynamicHelmet
+        title="Wishlist - CampusCart"
+        description="View and manage your wishlist on CampusCart. Save your favorite products for future purchases."
+        keywords="wishlist, saved items, CampusCart, student marketplace, favorite products"
+      />
+      <div className="home-container">
+        <div className="products-section">
+          {wishlist && wishlist.length > 0 ? (
+            <div className="products-grid">
+              {wishlist.map((item) => (
                 <div key={item._id} className="homepage-product-card">
                   <div
                     className="product-navigater"
-                    onClick={() => {
-                      navigate(`/product/${item?.productId?._id}`);
-                    }}
+                    onClick={() => navigate(`/product/${item?.productId?._id}`)}
                   >
                     <img
                       className="homepage-product-image"
@@ -51,13 +50,15 @@ const WishlistPage = () => {
                     <button
                       className="add-to-cart-btn"
                       onClick={() => {
-                        const updatedCart = [...cart, item];
-                        setCart(updatedCart);
-                        localStorage.setItem(
-                          "cart",
-                          JSON.stringify(updatedCart)
-                        );
-                        toast.success(`${item.productId.name} added to cart`);
+                        const itemExists = cart.some(cartItem => cartItem._id === item?.productId?._id);
+                        if (itemExists) {
+                          toast.info(`${item?.productId?.name} is already in your cart`);
+                        } else {
+                          const updatedCart = [...cart, item];
+                          setCart(updatedCart);
+                          localStorage.setItem("cart", JSON.stringify(updatedCart));
+                          toast.success(`${item?.productId?.name} added to cart`);
+                        }
                       }}
                     >
                       Add To Cart
@@ -70,12 +71,14 @@ const WishlistPage = () => {
                     </button>
                   </div>
                 </div>
-              )
-            )}
-          </div>
-        )}
+              ))}
+            </div>
+          ) : (
+            <p className="no-products-message">Your wishlist is empty.</p>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

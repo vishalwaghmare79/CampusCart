@@ -4,7 +4,9 @@ import { NavLink } from "react-router-dom";
 function AdminMenu() {
   return (
     <div className="sidebar-menu">
-      <h4 className="menu-title">Admin Panel</h4>
+      <h4 className="menu-title">
+      <NavLink to="/dashboard/admin/">Admin Panel</NavLink>
+      </h4>
       <ul className="menu-list">
         <li className="menu-item">
           <NavLink

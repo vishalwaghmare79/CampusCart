@@ -47,9 +47,9 @@ function Login() {
   return (
     <>
       <DynamicHelmet
-        title="Login - Shopease E-Commerce"
-        description="Login to Shopease to access your account and start shopping or selling products."
-        keywords="login, ecommerce, student marketplace, Shopease"
+        title="Login - CampusCart"
+        description="Login to CampusCart to access your account and start shopping or selling products within your student community."
+        keywords="login, ecommerce, student marketplace, CampusCart"
       />
       <div className="auth-page login-form">
         <div className="form">

@@ -5,6 +5,7 @@ import axios from "axios";
 import { Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../components/spinner/Spinner";
+import DynamicHelmet from "../../components/Common/DynamicHelmet";
 const { Option } = Select;
 
 function CreateProduct() {
@@ -89,6 +90,12 @@ function CreateProduct() {
   };
 
   return (
+    <>
+    <DynamicHelmet
+      title="Sell Products - CampusCart"
+      description="List your products for sale on CampusCart and connect with students looking to buy within the campus community."
+      keywords="sell products, list items, student marketplace, CampusCart, buy and sell, student community"
+    />
     <div className="dashboard">
       <div className="sidebar">
         <UserMenu />
@@ -189,6 +196,7 @@ function CreateProduct() {
         )}
       </div>
     </div>
+    </>
   );
 }
 

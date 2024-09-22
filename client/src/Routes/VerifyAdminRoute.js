@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/auth";
 import { Outlet } from "react-router-dom";
 import axios from "axios";
-import VerifyLogin from "../components/spinner/VerifyLogin";
+import Navigator from "../components/spinner/Navigator";
 
 export const VerifyAdminRoute = () => {
     const [ok, setOk] = useState(false);
@@ -29,5 +29,5 @@ export const VerifyAdminRoute = () => {
     }, [auth?.token]);
 
     // Render the Outlet if authenticated, otherwise render LoginFirst
-    return ok ? <Outlet /> : <VerifyLogin path=""/>;
+    return ok ? <Outlet /> : <Navigator path=""/>;
 };

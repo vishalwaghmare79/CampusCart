@@ -33,13 +33,15 @@ function Header() {
     toast.success("Logout Successfully");
   };
 
+  const handleDropdownItemClick = () => {
+    setDropdownOpen(false);
+  };
+
   return (
     <>
       <nav className="navbar wrapper">
         <h1 className="navbar-logo">
-          <NavLink to="/">
-          Campus<span>Cart</span>
-          </NavLink>
+          <NavLink to="/">Campus<span>Cart</span></NavLink>
         </h1>
 
         <div>
@@ -54,7 +56,7 @@ function Header() {
                 <Badge count={wishlist?.length} overflowCount={5}>
                   <i className="nav-icon ri-heart-line"></i>
                 </Badge>
-                  <span>wishlist</span>
+                <span>wishlist</span>
               </NavLink>
             </li>
             <li className="nav-item">
@@ -62,7 +64,7 @@ function Header() {
                 <Badge count={cart?.length} overflowCount={5}>
                   <i className="nav-icon ri-shopping-bag-line"></i>
                 </Badge>
-                  <span>cart</span>
+                <span>cart</span>
               </NavLink>
             </li>
             <li className="nav-item user-dropdown">
@@ -85,22 +87,23 @@ function Header() {
                   </button>
 
                   {dropdownOpen && (
-                    <ul
-                      className="dropdown-menu"
-                      onClick={() => setDropdownOpen(false)}
-                    >
+                    <ul className="dropdown-menu">
                       <li>
                         <NavLink
                           to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
                           className="dropdown-item"
                           activeClassName="active"
+                          onClick={handleDropdownItemClick}
                         >
                           Dashboard
                         </NavLink>
                       </li>
                       <li>
                         <NavLink
-                          onClick={handleLogout}
+                          onClick={() => {
+                            handleLogout();
+                            handleDropdownItemClick(); 
+                          }}
                           to="/login"
                           className="dropdown-item"
                           activeClassName="active"
@@ -124,11 +127,15 @@ function Header() {
           <span>Home</span>
         </NavLink>
         <NavLink to="/user/wishlist" className="bottom-nav-link" activeClassName="active">
+        <Badge count={wishlist?.length} overflowCount={5}>
           <i className="ri-heart-line"></i>
+          </Badge>
           <span>Wishlist</span>
         </NavLink>
         <NavLink to="/cart" className="bottom-nav-link" activeClassName="active">
+        <Badge count={wishlist?.length} overflowCount={5}>
           <i className="ri-shopping-bag-line"></i>
+          </Badge>
           <span>Cart</span>
         </NavLink>
         {!auth?.user ? (
@@ -149,13 +156,17 @@ function Header() {
                     to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
                     className="mobile-dropdown-item"
                     activeClassName="active"
+                    onClick={() => setMobileDropdownOpen(false)} 
                   >
                     Dashboard
                   </NavLink>
                 </li>
                 <li>
                   <NavLink
-                    onClick={handleLogout}
+                    onClick={() => {
+                      handleLogout();
+                      setMobileDropdownOpen(false); 
+                    }}
                     to="/login"
                     className="mobile-dropdown-item"
                     activeClassName="active"

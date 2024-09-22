@@ -7,7 +7,6 @@ import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
 import Header from "./components/Common/Header";
 import Footer from "./components/Common/Footer";
-import Dashboard from "./pages/User/Dashboard";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
 import Orders from "./pages/User/Orders";
@@ -20,6 +19,7 @@ import CreateProduct from "./pages/User/CreateProduct";
 import ManageCategory from "./pages/Admin/ManageCategory";
 import ProductDetails from "./pages/ProductDetails";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
+import UserDashboard from "./pages/User/UserDashboard";
 import "./App.css";
 import "./styles/cart.css";
 import "./styles/homePage.css";
@@ -41,7 +41,7 @@ function App() {
 
           <Route element={<VerifyUserRoute />}>
             <Route path="/user/wishlist" element={<WishlistPage />} />
-            <Route path="/dashboard/user" element={<Dashboard />} />
+            <Route path="/dashboard/user" element={<UserDashboard />} />
             <Route
               path="/dashboard/user/create-product"
               element={<CreateProduct />}

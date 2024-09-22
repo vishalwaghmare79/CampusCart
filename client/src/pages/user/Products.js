@@ -3,6 +3,7 @@ import UserMenu from "./UserMenu";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import DynamicHelmet from "../../components/Common/DynamicHelmet";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -41,6 +42,12 @@ function Products() {
   };
 
   return (
+    <>
+     <DynamicHelmet
+      title="Manage Products - CampusCart"
+      description="Efficiently manage your products on CampusCart. Edit, update, or remove listings to keep your inventory current."
+      keywords="manage products, product listings, CampusCart, student marketplace, inventory management"
+    />
     <div className="dashboard">
       <div className="sidebar">
         <UserMenu />
@@ -72,6 +79,7 @@ function Products() {
         )}
       </div>
     </div>
+    </>
   );
 }
 

@@ -22,7 +22,7 @@ const WishListProvider = ({ children }) => {
 
   useEffect(() => {
     fetchWishlist();
-  }, [auth?.user]);
+  }, [auth?.user, wishlist]);
 
   // Add to Wishlist
   const addToWishlist = async (product) => {
