@@ -10,19 +10,21 @@ const WishListProvider = ({ children }) => {
   const [auth] = useAuth();
 
   // Fetch Wishlist
-  const fetchWishlist = async () => {
-    try {
-      const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/wishlist`;
-      const { data } = await axios.get(API_BASE_URL);
-      setWishlist(data?.wishlistItems);
-    } catch (error) {
-      console.error("Error fetching wishlist items", error);
-    }
-  };
+const fetchWishlist = async () => {
+  try {
+    const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/wishlist`;
+    const { data } = await axios.get(API_BASE_URL);
+    setWishlist(data?.wishlistItems);    
+  } catch (error) {
+    console.error("Error fetching wishlist items", error);
+  }
+};
 
-  useEffect(() => {
-    fetchWishlist();
-  }, [auth?.user, wishlist]);
+useEffect(() => {
+  fetchWishlist();
+  //eslint-disable-next-line
+}, [auth?.token]);
+
 
   // Add to Wishlist
   const addToWishlist = async (product) => {

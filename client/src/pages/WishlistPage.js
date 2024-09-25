@@ -54,8 +54,9 @@ const WishlistPage = () => {
                         if (itemExists) {
                           toast.info(`${item?.productId?.name} is already in your cart`);
                         } else {
-                          const updatedCart = [...cart, item];
+                          const updatedCart = [...cart, item.productId];
                           setCart(updatedCart);
+                          removeFromWishlist(item)
                           localStorage.setItem("cart", JSON.stringify(updatedCart));
                           toast.success(`${item?.productId?.name} added to cart`);
                         }

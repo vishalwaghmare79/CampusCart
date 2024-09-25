@@ -40,34 +40,34 @@ function HomePage() {
     getAllCategory();
   }, []);
 
-  // Get all products
-  const getAllProducts = async () => {
-    setLoading(true);
-    try {
-      const API_BASE_URL = `${
-        process.env.REACT_APP_API
-      }/api/v1/product/get-products?page=${page}&limit=10&category=${
-        activeCategory.id || ""
-      }`;
-      const { data } = await axios.get(API_BASE_URL);
-      setProducts(data.products);
-      setTotalPages(data.totalPages);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    } finally {
-      setLoading(false);
+  // Fetch Products
+const getAllProducts = async () => {
+  setLoading(true);
+  try {
+    const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/get-products?page=${page}&limit=10&category=${activeCategory?.id || ""}`;
+    const { data } = await axios.get(API_BASE_URL);
+    setProducts(data.products);
+    setTotalPages(data.totalPages);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  const fetchData = async () => {
+    // Fetch only when auth token is available or user is not logged in
+    if (auth && auth.token) {
+      await getAllProducts();
+    } else {
+      await getAllProducts();
     }
   };
 
-  useEffect(() => {
-    getAllProducts();
-  }, [activeCategory, page]);
-
-  useEffect(() => {
-    if (auth && auth.user) {
-      getAllProducts();
-    }
-  }, [auth]);
+  fetchData();
+  // eslint-disable-next-line
+}, [auth, activeCategory, page]);
 
   const imageBaseURL = `${process.env.REACT_APP_API}/api/v1/product/product-image`;
 

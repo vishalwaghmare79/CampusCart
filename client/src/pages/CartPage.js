@@ -18,10 +18,16 @@ function CartPage() {
   const [total, setTotal] = useState(0);
 
   const removeCartItem = (id) => {
-    let myCart = cart.filter((item) => item._id !== id);
-    setCart(myCart);
-    localStorage.setItem("cart", JSON.stringify(myCart));
-    toast.success("Item removed from cart");
+    try {
+      let myCart = [...cart];
+      let index = myCart.findIndex((item) => item._id === id);
+      myCart.splice(index, 1);
+      setCart(myCart);
+      localStorage.setItem("cart", JSON.stringify(myCart));
+      toast.success("Item removed from cart");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -29,27 +35,44 @@ function CartPage() {
     setTotal(result);
   }, [cart]);
 
-  const getToken = async () => {
-    const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/braintree/client_token`;
-    const { data } = await axios.get(API_BASE_URL);
-    setClientToken(data?.clientToken);
+   // get payment gateway token
+   const getToken = async () => {
+    try {
+      const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/braintree/client_token`;
+      const { data } = await axios.get(API_BASE_URL);
+      setClientToken(data?.clientToken);
+    } catch (error) {
+      console.error("Error fetching Braintree token:", error);
+    }
   };
 
   useEffect(() => {
     getToken();
-  }, [auth?.token]);
+  }, [auth?.user]);
 
+  // handle payment
   const handlePayment = async () => {
-    setLoading(true);
-    const { nonce } = await instance.requestPaymentMethod();
-    const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/braintree/purchase`;
-    await axios.post(API_BASE_URL, { cart, nonce, total });
-    localStorage.removeItem("cart");
-    setCart([]);
-    navigate("/dashboard/user/orders");
-    toast.success("Payment Successfully");
-    setLoading(false);
+    try {
+      setLoading(true);
+      const { nonce } = await instance.requestPaymentMethod();
+      const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/braintree/purchase`;
+      const { data } = await axios.post(API_BASE_URL, {
+        cart,
+        nonce,
+        total,
+      });
+      localStorage.removeItem("cart");
+      setCart([]);
+      navigate("/dashboard/user/orders");
+      toast.success("Payment Successfully");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const imageBaseURL = `${process.env.REACT_APP_API}/api/v1/product/product-image`;
 
   return (
     <>
@@ -65,19 +88,19 @@ function CartPage() {
               <div key={item._id} className="cart-item">
                 <img
                   className="cart-item-img"
-                  src={`${process.env.REACT_APP_API}/api/v1/product/product-image/${item._id}`}
-                  alt={item.name}
+                  src={`${imageBaseURL}/${item._id}`}
+                  alt={item?.name || "Product Image"}
                 />
                 <div className="cart-item-details">
                   <h5>{item.name}</h5>
-                  <p>{item.description ? item.description.slice(0, 30) : "No description available."}...</p>
+                  <p className="cart-item-description">{item.description ? item.description.slice(0, 30) : "No description available."}...</p>
                   <p>₹{item.price}</p>
                 </div>
                 <button className="remove-btn" onClick={() => removeCartItem(item._id)}>Remove</button>
               </div>
             ))
           ) : (
-            <p>Your cart is empty.</p>
+            <p className="no-products-message">Your cart is empty.</p>
           )}
         </div>
         {cart.length > 0 && (
@@ -85,14 +108,28 @@ function CartPage() {
             <h2>Cart Summary</h2>
             <h4>Current Address: {auth?.user?.address || "No address available"}</h4>
             <div className="total-price">Total: ₹{total}</div>
-            {clientToken && (
-              <DropIn options={{ authorization: clientToken }} onInstance={setInstance} />
-            )}
-            {loading ? (
-              <Spinner />
+            {auth?.user ? (
+              <>
+                {clientToken && (
+                  <DropIn
+                    options={{ authorization: clientToken }}
+                    onInstance={(instance) => setInstance(instance)}
+                  />
+                )}
+                {loading ? (
+                  <Spinner />
+                ) : (
+                  <button className="checkout-btn" onClick={handlePayment}>
+                    Make Payment
+                  </button>
+                )}
+              </>
             ) : (
-              <button className="checkout-btn" onClick={handlePayment}>
-                Make Payment
+              <button
+                className="checkout-btn"
+                onClick={() => navigate("/login", { state: "/cart" })}
+              >
+                Please Login to Checkout
               </button>
             )}
           </div>

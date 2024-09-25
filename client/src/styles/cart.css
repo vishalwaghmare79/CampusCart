@@ -80,6 +80,7 @@
     color: white;
     border: none;
     padding: 10px;
+    margin-top: 20px;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -107,5 +108,9 @@
         border-radius: 8px;
         box-shadow: none;
         padding: 0px;
+    }
+
+    .checkout-btn{
+        margin-top: 10px;
     }
 }

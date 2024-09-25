@@ -133,7 +133,7 @@ function Header() {
           <span>Wishlist</span>
         </NavLink>
         <NavLink to="/cart" className="bottom-nav-link" activeClassName="active">
-        <Badge count={wishlist?.length} overflowCount={5}>
+        <Badge count={cart?.length} overflowCount={5}>
           <i className="ri-shopping-bag-line"></i>
           </Badge>
           <span>Cart</span>
