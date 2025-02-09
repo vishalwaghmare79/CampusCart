@@ -31,8 +31,6 @@ function Orders() {
     }
   }, [auth?.token]);
 
-  const imageBaseURL = `${process.env.REACT_APP_API}/api/v1/product/product-image`;
-
   return (
    <>
      <DynamicHelmet
@@ -66,8 +64,8 @@ function Orders() {
                   <div key={j} className="product-info">
                     <img
                       className="product-image-small"
-                      src={`${imageBaseURL}/${item._id}`}
-                      alt={item?.name || 'Product Image'}
+                      src={item.image.url}
+                      alt={item.image.publicId || "Product Image"}
                     />
                     <p>{item.name}</p>
                   </div>

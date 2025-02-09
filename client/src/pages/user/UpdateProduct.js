@@ -80,9 +80,6 @@ function UpdateProduct() {
     if (!quantity) {
       return toast.error("Quantity is required");
     }
-    if (!image || image.size > 1048576) {
-      return toast.error("Image is required and should be less than 1MB");
-    }
 
     try {
       const productData = new FormData();
@@ -99,7 +96,7 @@ function UpdateProduct() {
 
       if (data?.success) {
         toast.success(data.message);
-        navigate("/dashboard/user/products");
+        navigate("/dashboard/admin/all-products");
       } else {
         toast.error(data?.message);
       }

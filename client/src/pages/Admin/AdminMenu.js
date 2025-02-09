@@ -20,6 +20,16 @@ function AdminMenu() {
         </li>
         <li className="menu-item">
           <NavLink
+            to="/dashboard/admin/all-products"
+            className={({ isActive }) =>
+              isActive ? "menu-link active-link" : "menu-link"
+            }
+          >
+            Products
+          </NavLink>
+        </li>
+        <li className="menu-item">
+          <NavLink
             to="/dashboard/admin/manage-orders"
             className={({ isActive }) =>
               isActive ? "menu-link active-link" : "menu-link"

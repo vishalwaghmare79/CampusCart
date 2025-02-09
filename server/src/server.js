@@ -4,13 +4,14 @@ const authRouter = require("./routes/authRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
 const wishlistRoute = require('./routes/wishlistRoute');
-const cors = require("cors");
 require("dotenv").config();
 const app = express();
 
 
+const cors = require("cors");
 app.use(cors()); // Enable CORS for all origins
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); 
 
 app.use("/api/v1/auth", authRouter); // usersRouter
 app.use('/api/v1/category', categoryRoute); // categoryRouter

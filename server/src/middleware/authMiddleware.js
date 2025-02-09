@@ -2,20 +2,31 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models/userSchema.Model');
 
 // Middleware to check for valid JWT token and authenticate user
-const requireSignIn = (req, res, next) => {
-    const token = req.header('Authorization');
+const requireSignIn = async (req, res, next) => {
+    const token = req.header("Authorization");
 
     if (!token) {
-        return res.status(401).json({ message: 'No token, authorization denied' });
+        return res.status(401).json({ message: "No token, authorization denied" });
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY); 
-        req.user = decoded; 
-        next(); 
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+        const user = await User.findById(decoded._id).select("role");
+
+        if (!user) {
+            return res.status(401).json({ message: "User not found" });
+        }
+
+        req.user = {
+            _id: decoded._id,
+            role: user.role, 
+        };
+
+        next();
     } catch (err) {
-        console.error('Token verification error:', err.message);
-        res.status(401).json({ message: 'Token is not valid' }); 
+        console.error("Token verification error:", err.message);
+        res.status(401).json({ message: "Token is not valid" });
     }
 };
 

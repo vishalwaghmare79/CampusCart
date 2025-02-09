@@ -27,6 +27,8 @@ import "./styles/authForm.css";
 import "./styles/dashboard.css";
 import "./styles/productDetailsPage.css";
 import "react-toastify/dist/ReactToastify.css";
+import SearchResults from "./pages/SearchResults";
+import AllProducts from "./pages/Admin/AllProducts";
 
 function App() {
   return (
@@ -61,11 +63,19 @@ function App() {
               element={<ManageCategory />}
             />
             <Route
+              path="/dashboard/admin/all-products"
+              element={<AllProducts />}
+            />
+             <Route
+              path="/dashboard/admin/all-products/:productId"
+              element={<UpdateProduct />}
+            />
+            <Route
               path="/dashboard/admin/manage-orders"
               element={<ManageOrder />}
             />
           </Route>
-
+          <Route path="/search" element={<SearchResults />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />

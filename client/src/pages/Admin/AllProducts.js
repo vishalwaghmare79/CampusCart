@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
-import UserMenu from "./UserMenu";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import DynamicHelmet from "../../components/Common/DynamicHelmet";
+import AdminMenu from "./AdminMenu";
 
-function Products() {
+function AllProducts() {
   const [products, setProducts] = useState([]);
 
   // Get all products
   const getAllProducts = async () => {
     try {
-      const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/user-products`;
+      const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/product/admin/products`;
       const { data } = await axios.get(API_BASE_URL);
       setProducts(data?.products || []);
     } catch (error) {
@@ -49,7 +49,7 @@ function Products() {
     />
     <div className="dashboard">
       <div className="sidebar">
-        <UserMenu />
+        <AdminMenu />
       </div>
       <div className="content">
         <h1 className="content-title">All Products</h1>
@@ -66,7 +66,7 @@ function Products() {
                 <p className="product-description">{item?.description}</p>
               </div>
               <div className="product-actions">
-                <Link to={`/dashboard/user/products/${item._id}`} className="update-link">
+                <Link to={`/dashboard/admin/all-products/${item._id}`} className="update-link">
                   <button className="update-button">Update</button>
                 </Link>
                 <button className="delete-button" onClick={() => handleDelete(item._id)}>Delete</button>
@@ -82,4 +82,4 @@ function Products() {
   );
 }
 
-export default Products;
+export default AllProducts;

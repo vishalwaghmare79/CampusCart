@@ -10,8 +10,6 @@ const WishlistPage = () => {
   const [cart, setCart] = useCart();
   const navigate = useNavigate();
 
-  const imageBaseURL = `${process.env.REACT_APP_API}/api/v1/product/product-image`;
-
   return (
     <>
       <DynamicHelmet
@@ -31,8 +29,8 @@ const WishlistPage = () => {
                   >
                     <img
                       className="homepage-product-image"
-                      src={`${imageBaseURL}/${item?.productId?._id}`}
-                      alt={item?.productId?.name || "Product Image"}
+                      src={item.image.url}
+                      alt={item.image.publicId || "Product Image"}
                     />
                     <div className="homepage-product-details">
                       <h5 className="homepage-product-name">

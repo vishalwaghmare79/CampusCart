@@ -28,16 +28,24 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     image: {
-      data: Buffer,
-      contentType: String,
+      url: {
+        type: String,
+        required: true,
+      },
+      publicId: {
+        type: String,
+        required: true,
+      },
     },
     shipping: {
       type: Boolean,
       default: false,
     },
-    createdBy: { 
-      type: mongoose.ObjectId, 
-      ref: "User", required: true },
+    createdBy: {
+      type: mongoose.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   {
     timestamps: true,

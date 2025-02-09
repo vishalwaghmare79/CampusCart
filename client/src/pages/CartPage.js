@@ -72,8 +72,6 @@ function CartPage() {
     }
   };
 
-  const imageBaseURL = `${process.env.REACT_APP_API}/api/v1/product/product-image`;
-
   return (
     <>
       <DynamicHelmet
@@ -88,8 +86,8 @@ function CartPage() {
               <div key={item._id} className="cart-item">
                 <img
                   className="cart-item-img"
-                  src={`${imageBaseURL}/${item._id}`}
-                  alt={item?.name || "Product Image"}
+                  src={item.image.url}
+                  alt={item.image.publicId || "Product Image"}
                 />
                 <div className="cart-item-details">
                   <h5>{item.name}</h5>

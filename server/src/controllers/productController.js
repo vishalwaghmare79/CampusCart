@@ -1,8 +1,8 @@
 const { Product } = require("../models/productSchema.Model");
 const slugify = require("slugify");
 const { Order } = require("../models/orderSchema.Model");
-const fs = require("fs");
 const braintree = require("braintree");
+const cloudinary = require("../config/cloudinary");
 require("dotenv").config();
 
 // payment gateway
@@ -15,9 +15,8 @@ const gateway = new braintree.BraintreeGateway({
 
 const createProductController = async (req, res) => {
   try {
-    const { name, price, description, category, quantity, shipping } =
-      req.fields;
-    const { image } = req.files;
+    const { name, price, description, category, quantity, shipping } = req.body;
+    const file = req.file;
     const userId = req.user._id;
 
     // Validation
@@ -32,13 +31,17 @@ const createProductController = async (req, res) => {
         return res.status(400).send({ error: "Category is required" });
       case !quantity:
         return res.status(400).send({ error: "Quantity is required" });
-      case !image || image.size > 1048576: // 1MB = 1048576 bytes
+      case !file || file.size > 1048576:
         return res
           .status(400)
           .send({ error: "Image is required and should be less than 1MB" });
     }
 
-    // Creating the product
+    const image = {
+      url: file.path,
+      publicId: file.filename,
+    };
+
     const product = new Product({
       name,
       slug: slugify(name),
@@ -46,15 +49,10 @@ const createProductController = async (req, res) => {
       price,
       category,
       quantity,
+      image,
       shipping,
-      createdBy: userId, // Associate product with the logged-in user
+      createdBy: userId,
     });
-
-    // If an image is uploaded, save it to the product
-    if (image) {
-      product.image.data = fs.readFileSync(image.path);
-      product.image.contentType = image.type;
-    }
 
     await product.save();
 
@@ -76,23 +74,57 @@ const createProductController = async (req, res) => {
 // home page
 const getProductController = async (req, res) => {
   try {
-    let filter = {};
+    const userId = req.user?._id;
 
-    // Exclude user's own products if they are logged in
-    if (req.user) {
-      const userId = req.user._id;
-      filter = { createdBy: { $ne: userId } };
-    }
+    const page = parseInt(req.query.page) > 0 ? parseInt(req.query.page) : 1;
+    const limit =
+      parseInt(req.query.limit) > 0 ? parseInt(req.query.limit) : 10;
 
-    // Apply category filter if provided
-    const category = req.query.category;
-    if (category) {
-      filter.category = category;
-    }
+    const filter = userId ? { createdBy: { $ne: userId } } : {};
 
-    // Parse page and limit, ensure they are positive integers
+    const [products, totalProducts] = await Promise.all([
+      Product.find(filter)
+        .populate("category", "name _id")
+        .limit(limit)
+        .skip((page - 1) * limit)
+        .sort({ createdAt: -1 }),
+
+      Product.countDocuments(filter),
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: "Products retrieved successfully",
+      totalProducts,
+      page,
+      totalPages: Math.ceil(totalProducts / limit),
+      products,
+    });
+  } catch (error) {
+    console.error("Error while retrieving products:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Error in retrieving products",
+      error: error.message,
+    });
+  }
+};
+
+// filter product by category
+const getProductByCategoryController = async (req, res) => {
+  try {
+    const { id: categoryId } = req.params;
+    const userId = req.user?._id;
+
+    // Parse page and limit, ensuring they are positive integers
     const page = Math.max(1, parseInt(req.query.page)) || 1;
     const limit = Math.max(1, parseInt(req.query.limit)) || 10;
+
+    // Build the filter for the query
+    const filter = {
+      category: categoryId,
+      ...(userId && { createdBy: { $ne: userId } }),
+    };
 
     const products = await Product.find(filter)
       .populate("category")
@@ -113,10 +145,13 @@ const getProductController = async (req, res) => {
       products,
     });
   } catch (error) {
-    console.error("Error while retrieving products:", error.message);
+    console.error(
+      "Error while retrieving products by category:",
+      error.message
+    );
     res.status(500).send({
       success: false,
-      message: "Error in retrieving products",
+      message: "Error in retrieving products by category",
       error: error.message,
     });
   }
@@ -130,7 +165,6 @@ const getUserProductsController = async (req, res) => {
     // Fetch all products created by the logged-in user
     const userProducts = await Product.find({ createdBy: userId })
       .populate("category")
-      .select("-image")
       .sort({ createdAt: -1 });
 
     res.status(200).send({
@@ -149,13 +183,43 @@ const getUserProductsController = async (req, res) => {
   }
 };
 
+const getAllProductsForAdminController = async (req, res) => {
+  try {
+    if (req.user.role !== 1) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized! Only admins can access all products.",
+      });
+    }
+
+    const allProducts = await Product.find()
+      .populate("category")
+      .populate("createdBy", "name email")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      message: "All products retrieved successfully for admin",
+      totalProducts: allProducts.length,
+      products: allProducts,
+    });
+  } catch (error) {
+    console.error("Error retrieving all products for admin:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error in retrieving products",
+      error,
+    });
+  }
+};
+
 const getSingleProductController = async (req, res) => {
   try {
     const { productId } = req.params;
-    
+
     const product = await Product.findOne({ _id: productId })
       .populate("category")
-      .select("-image")
+      .select("-image");
 
     res.status(200).send({
       success: true,
@@ -172,32 +236,10 @@ const getSingleProductController = async (req, res) => {
   }
 };
 
-// Get photo
-const productImageController = async (req, res) => {
-  try {    
-    const product = await Product.findById(req.params.id).select("image");
-    if (product && product.image && product.image.data) {
-      res.set("Content-Type", product.image.contentType);
-      return res.send(product.image.data);
-    }
-    return res.status(404).send({
-      success: false,
-      message: "Image not found",
-    });
-  } catch (error) {
-    console.error("Error while retrieving product image:", error);
-    res.status(500).send({
-      success: false,
-      message: "Error in retrieving product image",
-      error,
-    });
-  }
-};
-
 const deleteProductController = async (req, res) => {
   try {
     const userId = req.user._id;
-    const product = await Product.findById(req.params.id).select("-image");
+    const product = await Product.findById(req.params.id);
 
     // Check if the product exists
     if (!product) {
@@ -215,7 +257,17 @@ const deleteProductController = async (req, res) => {
       });
     }
 
-    // Delete the product if ownership is confirmed
+    // Delete image from Cloudinary (if exists)
+    if (product.image && product.image.publicId) {
+      try {
+        const publicId = product.image.publicId;
+        await cloudinary.api.delete_resources([publicId]);
+      } catch (error) {
+        console.error("Error deleting image from Cloudinary:", error);
+      }
+    }
+
+    // Delete the product from the database
     await Product.findByIdAndDelete(req.params.id);
 
     res.status(200).send({
@@ -223,7 +275,7 @@ const deleteProductController = async (req, res) => {
       message: "Product deleted successfully",
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error while deleting product:", error);
     res.status(500).send({
       success: false,
       message: "Error while deleting product",
@@ -234,12 +286,28 @@ const deleteProductController = async (req, res) => {
 
 const updateProductController = async (req, res) => {
   try {
-    const { name, price, description, category, quantity, shipping } =
-      req.fields;
-    const { image } = req.files;
-    const userId = req.user._id;
+    const { name, price, description, category, quantity, shipping } = req.body;
 
-    // Validation
+    const file = req.file;
+    const userId = req.user._id;
+    const userRole = req.user.role;
+
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res
+        .status(404)
+        .send({ success: false, message: "Product not found" });
+    }
+
+    if (userRole !== 1 && product.createdBy.toString() !== userId.toString()) {
+      return res
+        .status(403)
+        .send({
+          success: false,
+          message: "Unauthorized to update this product",
+        });
+    }
+
     if (!name) return res.status(400).send({ error: "Name is required" });
     if (!price) return res.status(400).send({ error: "Price is required" });
     if (!description)
@@ -248,30 +316,15 @@ const updateProductController = async (req, res) => {
       return res.status(400).send({ error: "Category is required" });
     if (!quantity)
       return res.status(400).send({ error: "Quantity is required" });
-    if (!image || image.size > 1048576)
-      return res
-        .status(400)
-        .send({ error: "Image is required and should be less than 1MB" });
 
-    // Fetch the product and check ownership
-    const product = await Product.findById(req.params.id);
-
-    if (!product) {
-      return res.status(404).send({
-        success: false,
-        message: "Product not found",
-      });
+    let updatedImage = product.image;
+    if (file) {
+      updatedImage = {
+        url: file.path,
+        publicId: file.filename,
+      };
     }
 
-    // Check if the logged-in user is the owner of the product
-    if (product.createdBy.toString() !== userId.toString()) {
-      return res.status(403).send({
-        success: false,
-        message: "Unauthorized to update this product",
-      });
-    }
-
-    // Update product details
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       {
@@ -282,17 +335,10 @@ const updateProductController = async (req, res) => {
         category,
         quantity,
         shipping,
+        image: updatedImage,
       },
-      { new: true } // Return the updated product
+      { new: true }
     );
-
-    // If an image is uploaded, update it
-    if (image) {
-      updatedProduct.image.data = fs.readFileSync(image.path);
-      updatedProduct.image.contentType = image.type;
-    }
-
-    await updatedProduct.save();
 
     res.status(200).send({
       success: true,
@@ -314,15 +360,15 @@ const braintreeTokenController = async (req, res) => {
   try {
     gateway.clientToken.generate({}, (error, response) => {
       if (error) {
-        console.error('Error generating Braintree token:', error);
-        res.status(500).send({ error: 'Error generating Braintree token.' });
+        console.error("Error generating Braintree token:", error);
+        res.status(500).send({ error: "Error generating Braintree token." });
       } else {
         res.json({ clientToken: response.clientToken });
       }
     });
   } catch (error) {
-    console.error('Error generating Braintree token:', error);
-    res.status(500).send({ error: 'Internal server error.' });
+    console.error("Error generating Braintree token:", error);
+    res.status(500).send({ error: "Internal server error." });
   }
 };
 
@@ -332,21 +378,21 @@ const braintreePaymentController = async (req, res) => {
     const { cart, nonce, total } = req.body;
 
     if (!cart || !nonce || !total) {
-      return res.status(400).send({ error: 'Invalid request data.' });
+      return res.status(400).send({ error: "Invalid request data." });
     }
 
     gateway.transaction.sale(
       {
-        amount: total, 
-        paymentMethodNonce: nonce, 
+        amount: total,
+        paymentMethodNonce: nonce,
         options: {
-          submitForSettlement: true, 
+          submitForSettlement: true,
         },
       },
       async (error, result) => {
         if (error) {
-          console.error('Braintree transaction error:', error);
-          return res.status(500).send({ error: 'Transaction failed.' });
+          console.error("Braintree transaction error:", error);
+          return res.status(500).send({ error: "Transaction failed." });
         }
 
         if (result?.success) {
@@ -359,30 +405,72 @@ const braintreePaymentController = async (req, res) => {
 
             return res.json({ ok: true, order });
           } catch (saveError) {
-            console.error('Error saving order:', saveError);
-            return res.status(500).send({ error: 'Error saving order.' });
+            console.error("Error saving order:", saveError);
+            return res.status(500).send({ error: "Error saving order." });
           }
         } else {
-          console.error('Transaction error:', result?.message);
-          return res.status(500).send({ error: result?.message || 'Transaction failed.' });
+          console.error("Transaction error:", result?.message);
+          return res
+            .status(500)
+            .send({ error: result?.message || "Transaction failed." });
         }
       }
     );
   } catch (error) {
-    console.error('Error processing payment:', error);
-    return res.status(500).send({ error: 'Internal server error.' });
+    console.error("Error processing payment:", error);
+    return res.status(500).send({ error: "Internal server error." });
   }
 };
 
+// Search Product Controller
+const searchProductController = async (req, res) => {
+  try {
+    const { keyword } = req.params;
+    const userId = req.user?._id;
+
+    if (!keyword || keyword.trim() === "") {
+      return res.status(400).json({
+        success: false,
+        message: "Keyword is required for searching",
+      });
+    }
+
+    // Build the search query
+    const filter = {
+      $or: [
+        { name: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } },
+      ],
+      ...(userId && { createdBy: { $ne: userId } }),
+    };
+
+    const result = await Product.find(filter).select("-image");
+
+    res.status(200).json({
+      success: true,
+      message: "Products fetched successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error in Search Product API:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Error in Search Product API",
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   createProductController,
   getProductController,
   getUserProductsController,
+  getAllProductsForAdminController,
   getSingleProductController,
-  productImageController,
   deleteProductController,
   updateProductController,
   braintreeTokenController,
   braintreePaymentController,
+  searchProductController,
+  getProductByCategoryController,
 };

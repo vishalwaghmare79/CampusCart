@@ -28,8 +28,6 @@ function ProductDetails() {
     }
   };
 
-  const imageBaseURL = `${process.env.REACT_APP_API}/api/v1/product/product-image`;
-
   return (
     <>
       <DynamicHelmet
@@ -45,8 +43,8 @@ function ProductDetails() {
             <div className="product-img-section">
               <img
                 className="product-img"
-                src={`${imageBaseURL}/${productId}`}
-                alt={product?.name || "Product Image"}
+                src={product?.image?.url || "producat img"}
+                alt={product.image.publicId || "Product Image"}
               />
             </div>
 

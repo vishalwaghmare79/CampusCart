@@ -55,15 +55,15 @@ function ManageCategory () {
     if (!selected) return;
     try {
       const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/category/update-category/${selected._id}`;
-      const res = await axios.put(API_BASE_URL, { name: updateName });
-      if (res.data.success) {
-        toast.success(res.data.message);
+      const { data } = await axios.put(API_BASE_URL, { name: updateName });
+      if (data?.success) {
+        toast.success(data?.message);
         setIsModalOpen(false);
         setSelected(null);
         setUpdateName("");
         getAllCategory();
       } else {
-        toast.error(res.data.message);
+        toast.error(data?.message);
       }
     } catch (error) {
       console.log(error);
@@ -75,12 +75,12 @@ function ManageCategory () {
   const handleDelete = async (id) => {
     try {
       const API_BASE_URL = `${process.env.REACT_APP_API}/api/v1/category/delete-category/${id}`;
-      const res = await axios.delete(API_BASE_URL);
-      if (res.data.success) {
-        toast.success(res.data.message);
+      const { data } = await axios.delete(API_BASE_URL);
+      if (data?.success) {
+        toast.success(data?.message);
         getAllCategory();
       } else {
-        toast.error(res.data.message);
+        toast.error(data?.message);
       }
     } catch (error) {
       console.log(error);

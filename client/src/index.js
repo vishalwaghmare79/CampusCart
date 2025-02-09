@@ -6,12 +6,14 @@ import reportWebVitals from "./reportWebVitals";
 import { AuthProvider } from "./context/auth";
 import { HelmetProvider } from "react-helmet-async";
 import { CartProvider } from "./context/cart";
+import { SearchProvider } from "./context/search";
 import { WishListProvider } from "./context/wishlist";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   <AuthProvider>
+    <SearchProvider>
     <CartProvider>
       <WishListProvider>
         <HelmetProvider>
@@ -19,6 +21,7 @@ root.render(
         </HelmetProvider>
       </WishListProvider>
     </CartProvider>
+    </SearchProvider>
   </AuthProvider>
   // </React.StrictMode>
 );
