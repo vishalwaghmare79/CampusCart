@@ -66,10 +66,14 @@ export const updateProductController = async (req, res) => {
       const userId = req.user._id;
       const userRole = req.user.role;
 
-      const product = await Product.findById(req.params.id);
+      if (!name || !price || !description || !category || !quantity) {
+          return res.status(400).send({ error: "All fields are required" });
+      }
+
+      const product = await Product.findById(req.params.id).select("createdBy image");
       if (!product) {
           return res.status(404).send({ success: false, message: "Product not found" });
-      }      
+      }
 
       if (userRole !== 1 && product.createdBy.toString() !== userId.toString()) {
           return res.status(403).send({
@@ -78,13 +82,12 @@ export const updateProductController = async (req, res) => {
           });
       }
 
-      if (!name || !price || !description || !category || !quantity) {
-          return res.status(400).send({ error: "All fields are required" });
-      }
-
       let updatedImage = product.image;
       if (file) {
-          updatedImage = { url: file.path, publicId: file.filename };
+          const result = await cloudinary.uploader.upload(file.path, {
+              folder: "products",
+          });
+          updatedImage = { url: result.secure_url, publicId: result.public_id };
       }
 
       const updatedProduct = await Product.findByIdAndUpdate(
@@ -111,7 +114,7 @@ export const updateProductController = async (req, res) => {
       res.status(500).send({
           success: false,
           message: "Error in updating product",
-          error,
+          error: error.message, 
       });
   }
 };

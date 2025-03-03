@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { getAllCategories } from "../services/categoryService";
-import { getAllProducts, getProductsByCategory } from "../services/productService";
+import {
+  getAllProducts,
+  getProductsByCategory,
+} from "../services/productService";
 import ProductCard from "../components/ProductCard";
-import useAuth from './../hooks/useAuth';
+import useAuth from "./../hooks/useAuth";
 
 const ProductPage = () => {
   const [categories, setCategories] = useState([]);
@@ -17,7 +20,7 @@ const ProductPage = () => {
   useEffect(() => {
     fetchCategories();
     const queryParams = new URLSearchParams(location.search);
-    const categoryId = queryParams.get('category');
+    const categoryId = queryParams.get("category");
     if (categoryId) {
       setSelectedCategory(categoryId);
       fetchProductsByCategory(categoryId);
@@ -27,7 +30,7 @@ const ProductPage = () => {
   }, [location.search]);
 
   const fetchCategories = async () => {
-    try {      
+    try {
       const res = await getAllCategories();
       if (res.success) {
         setCategories(res.categories);
@@ -77,7 +80,9 @@ const ProductPage = () => {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <div className="w-1/4 p-6 bg-white shadow-sm">
-        <h2 className="text-xl font-bold mb-6 text-gray-800">Filter by Category</h2>
+        <h2 className="text-xl font-bold mb-6 text-gray-800">
+          Filter by Category
+        </h2>
         <div className="space-y-3">
           {categories.map((category) => (
             <button
@@ -113,7 +118,16 @@ const ProductPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
-                <ProductCard key={product._id} product={product} />
+                <ProductCard
+                  key={product._id}
+                  name={product.name}
+                  shipping={product.shipping}
+                  image={product.image}
+                  _id={product._id}
+                  price={product.price}
+                  category={product.category}
+                  onAddToWishlist={() => addToWishlist(product)} 
+                />
               ))
             ) : (
               <p className="text-gray-500 col-span-full text-center">

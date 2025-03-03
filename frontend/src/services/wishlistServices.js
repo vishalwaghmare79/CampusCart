@@ -30,7 +30,7 @@ export const addToWishlist = async (productId) => {
 
 export const removeFromWishlist = async (wishlistItemId) => {
   try {    
-    const { data } = await axios.delete(`${API_BASE_URL}/api/v1/wishlist/remove-wishlist/${wishlistItemId._id}`);
+    const { data } = await axios.delete(`${API_BASE_URL}/api/v1/wishlist/remove-wishlist/${wishlistItemId}`);
     return data;
   } catch (error) {
     console.error("Error removing item from wishlist:", error);

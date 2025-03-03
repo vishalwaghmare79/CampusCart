@@ -6,7 +6,7 @@ const CartItems = ({ cart, removeFromCart }) => {
       {cart.length > 0 ? (
         cart.map((item) => (
           <div key={item._id} className="flex items-center border-b py-4">
-            <img src={item.image.url} alt={item.name} className="w-24 h-24 object-cover rounded-lg" />
+            <img src={item.image?.url} alt={item.name} className="w-24 h-24 object-cover rounded-lg" />
             <div className="ml-4 flex-1">
               <h5 className="text-lg font-semibold">{item.name}</h5>
               <p className="text-gray-800 font-medium">

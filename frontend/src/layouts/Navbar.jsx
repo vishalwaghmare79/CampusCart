@@ -122,7 +122,7 @@ function Navbar() {
           <i className="ri-home-line text-2xl"></i>
           <span className="text-xs">Home</span>
         </NavLink>
-        <NavLink to="/search" className="flex flex-col items-center text-gray-700 hover:text-blue-600" activeClassName="text-blue-600">
+        <NavLink to="/products" className="flex flex-col items-center text-gray-700 hover:text-blue-600" activeClassName="text-blue-600">
           <i className="ri-search-line text-2xl"></i>
           <span className="text-xs">Search</span>
         </NavLink>

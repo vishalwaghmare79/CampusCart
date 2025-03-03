@@ -19,7 +19,8 @@ const Orders = () => {
           setError(response.message);
         }
       } catch (err) {
-        setError("Failed to fetch orders. Please try again later.");
+        console.log(err);
+        
       } finally {
         setLoading(false);
       }
@@ -39,7 +40,7 @@ const Orders = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Your Orders</h1>
-      {orders.length === 0 ? (
+      {orders?.length === 0 ? (
         <p className="text-gray-600">No orders found.</p>
       ) : (
         <div className="space-y-6">

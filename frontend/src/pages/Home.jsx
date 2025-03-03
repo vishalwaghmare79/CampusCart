@@ -6,31 +6,41 @@ import { getAllProducts } from "../services/productService";
 import CategorySlider from "../components/CategorySlider";
 import ProductCard from "../components/ProductCard";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../layouts/Spinner";
+import useWishlist from "../hooks/useWishlist";
 
 const Home = () => {
   const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]); 
+  const [products, setProducts] = useState([]);
+  const { addToWishlist } = useWishlist();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const fetchCategories = async () => {
     try {
+      setLoading(true);
       const res = await getAllCategories();
       if (res.success) {
         setCategories(res.categories);
       }
     } catch (error) {
       toast.error("Failed to load categories");
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchProducts = async () => {
     try {
+      setLoading(true);
       const res = await getAllProducts();
       if (res.success) {
         setProducts(res.products.slice(0, 8));
       }
     } catch (error) {
       toast.error("Failed to load products");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -82,7 +92,7 @@ const Home = () => {
         <h1 className="text-2xl font-bold text-gray-700 mb-4">
           Browse Categories
         </h1>
-        <CategorySlider categories={categories} />
+        {loading ? <Spinner /> : <CategorySlider categories={categories} />}
       </div>
 
       <div className="p-6">
@@ -90,9 +100,18 @@ const Home = () => {
           Featured Products
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
+        {products.map((product) => (
+        <ProductCard
+          key={product._id}
+          name={product.name}
+          shipping={product.shipping}
+          image={product.image}
+          _id={product._id}
+          price={product.price}
+          category={product.category}
+          onAddToWishlist={() => addToWishlist(product)} 
+        />
+      ))}
         </div>
         <div className="flex justify-center mt-8">
           <button
