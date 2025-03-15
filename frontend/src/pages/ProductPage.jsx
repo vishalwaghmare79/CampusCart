@@ -79,8 +79,8 @@ const ProductPage = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <div className="w-1/4 p-6 bg-white shadow-sm">
-        <h2 className="text-xl font-bold mb-6 text-gray-800">
+      <div className="w-1/4 md:p-6 p-1.5 bg-white shadow-sm">
+        <h2 className="md:text-xl font-bold mb-6 text-gray-800">
           Filter by Category
         </h2>
         <div className="space-y-3">
@@ -88,7 +88,7 @@ const ProductPage = () => {
             <button
               key={category._id}
               onClick={() => handleCategoryClick(category._id)}
-              className={`block w-full py-2 px-4 text-left rounded-lg transition-colors duration-300 ${
+              className={`block w-full py-2 md:px-4 text-xs md:text-base text-center md:text-left rounded-lg transition-colors duration-300 ${
                 selectedCategory === category._id
                   ? "bg-blue-500 text-white"
                   : "bg-gray-100 hover:bg-gray-200"
@@ -100,7 +100,7 @@ const ProductPage = () => {
         </div>
       </div>
 
-      <div className="w-3/4 p-6">
+      <div className="w-3/4 p-2 md:p-6">
         <div className="flex space-x-2 mb-8">
           <input
             type="text"

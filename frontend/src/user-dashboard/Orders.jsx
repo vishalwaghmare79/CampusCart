@@ -20,7 +20,7 @@ const Orders = () => {
         }
       } catch (err) {
         console.log(err);
-        
+        setError("Failed to fetch orders. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -38,16 +38,16 @@ const Orders = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto h-screen px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Your Orders</h1>
       {orders?.length === 0 ? (
         <p className="text-gray-600">No orders found.</p>
       ) : (
         <div className="space-y-6">
           {orders.map((order) => (
-            <div key={order._id} className="bg-white shadow-md rounded-lg p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Order ID: {order._id}</h2>
+            <div key={order._id} className="bg-white shadow-md rounded-lg p-4 md:p-6">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                <h2 className="text-xl font-semibold mb-2 md:mb-0">Order ID: {order._id}</h2>
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-medium ${
                     order.status === "Order Placed"
@@ -71,7 +71,14 @@ const Orders = () => {
                 <ul className="space-y-2">
                   {order.items.map((item) => (
                     <li key={item._id} className="text-gray-600">
-                      <strong>Product ID:</strong> {item.productId} | <strong>Quantity:</strong> {item.quantity}
+                      <div className="flex flex-col md:flex-row md:space-x-4">
+                        <span>
+                          <strong>Product ID:</strong> {item.productId}
+                        </span>
+                        <span>
+                          <strong>Quantity:</strong> {item.quantity}
+                        </span>
+                      </div>
                     </li>
                   ))}
                 </ul>

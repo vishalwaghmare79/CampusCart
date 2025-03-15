@@ -1,0 +1,15 @@
+import react, { useEffect } from 'react';
+import './App.css'
+
+const FetchData = () => {
+
+    useEffect(()=> {
+
+    },[]);
+
+    return (
+        <>
+        <h1>hello world</h1>
+        </>
+    );
+}

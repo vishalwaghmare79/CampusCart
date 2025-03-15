@@ -36,3 +36,17 @@ connectDB()
   .catch((error) => {
     console.error("Error connecting to Database:", error.message);
   });
+
+
+const keepAlive = () => {
+  setInterval(async () => {
+    try {
+      await axios.get(process.env.PING_URL);
+      console.log("Pinged server to keep it alive");
+    } catch (error) {
+      console.error("Error pinging server:", error.message);
+    }
+  }, 10 * 60 * 1000); // Ping every 10 minutes
+};
+
+keepAlive();

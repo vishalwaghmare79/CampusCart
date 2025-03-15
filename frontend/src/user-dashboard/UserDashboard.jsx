@@ -9,7 +9,7 @@ const AdminDashboard = () => {
       <UserDashboardMenu />
       
       {/* Main Content */}
-      <div className="flex-1 p-6">
+      <div className="flex-1 md:p-6">
         <Outlet />
       </div>
     </div>
