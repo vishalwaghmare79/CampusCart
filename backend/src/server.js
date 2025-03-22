@@ -7,6 +7,7 @@ import { connectDB } from './config/db.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { orderRoutes } from './routes/orderRoutes.js';
+import axios from 'axios'; // Add this line
 dotenv.config();
 const app = express();
 
