@@ -10,7 +10,6 @@ WORKDIR /app
 COPY backend ./backend
 COPY --from=build /app/frontend/dist ./backend/public
 WORKDIR /app/backend
-COPY backend/.env .
 RUN npm install
 
 EXPOSE 5000
