@@ -12,9 +12,9 @@ dotenv.config();
 const app = express();
 
 
-app.use(cors()); 
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1/auth", authRoutes); // usersRouter
 app.use('/api/v1/category', categoryRoutes); // categoryRouter
@@ -37,17 +37,3 @@ connectDB()
   .catch((error) => {
     console.error("Error connecting to Database:", error.message);
   });
-
-
-const keepAlive = () => {
-  setInterval(async () => {
-    try {
-      await axios.get(process.env.PING_URL);
-      console.log("Pinged server to keep it alive");
-    } catch (error) {
-      console.error("Error pinging server:", error.message);
-    }
-  }, 10 * 60 * 1000); // Ping every 10 minutes
-};
-
-keepAlive();

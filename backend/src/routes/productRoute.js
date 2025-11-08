@@ -1,12 +1,12 @@
 import express from 'express'
 import { createProductController, getProductController, getProductByCategoryController, getUserProductsController, getAllProductsForAdminController, getSingleProductController, deleteProductController, updateProductController, searchProductController } from '../controllers/productController.js';
 import { requireSignIn, verifyLogin } from '../middlewares/authMiddleware.js';
-import { uploadImage } from '../middlewares/uploadImage.js';
+import { upload, uploadImage } from '../middlewares/uploadImage.js';
 const router = express.Router();
 
-router.post('/create-product', requireSignIn, uploadImage.single("image"), createProductController); // create product
+router.post('/create-product', requireSignIn, upload.single("image"), uploadImage, createProductController); // create product
 
-router.put('/update-product/:id', requireSignIn, uploadImage.single('image'), updateProductController); // update product
+router.put('/update-product/:id', requireSignIn, upload.single('image'), uploadImage, updateProductController); // update product
 
 router.get('/get-products',verifyLogin, getProductController); // get all products
 

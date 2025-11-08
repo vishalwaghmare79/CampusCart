@@ -1,13 +1,13 @@
 import express from 'express';
 import { createCategoryController, deleteCategoryController, getCategoryController, getSingleCategoryController, updateCategoryController } from '../controllers/categoryController.js';
 import { isAdmin, requireSignIn } from '../middlewares/authMiddleware.js';
-import { uploadImage } from './../middlewares/uploadImage.js';
+import { upload, uploadImage } from './../middlewares/uploadImage.js';
 
 const router = express.Router();
 
-router.post('/create-category', requireSignIn, isAdmin, uploadImage.single("image"), createCategoryController);
+router.post('/create-category', requireSignIn, isAdmin, upload.single("image"), uploadImage, createCategoryController);
 
-router.put('/update-category/:id', requireSignIn, isAdmin, uploadImage.single("image"), updateCategoryController);
+router.put('/update-category/:id', requireSignIn, isAdmin, upload.single("image"), uploadImage, updateCategoryController);
 
 router.get('/get-category', getCategoryController);
 
