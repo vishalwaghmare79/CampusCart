@@ -4,7 +4,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const createOrder = async (total) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/api/v1/order/create-order`, {
+    const response = await axios.post(`${API_BASE_URL}/order/create-order`, {
       total,
     });
     return response.data;
@@ -15,7 +15,7 @@ export const createOrder = async (total) => {
 
 export const verifyPayment = async (paymentData, token) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/api/v1/order/verify-payment`, paymentData,{
+    const response = await axios.post(`${API_BASE_URL}/order/verify-payment`, paymentData,{
       headers: {
         Authorization : token
       }
@@ -27,7 +27,7 @@ export const verifyPayment = async (paymentData, token) => {
 };
 export const fetchOrders = async (token) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/v1/order/get-order`,{
+    const response = await axios.get(`${API_BASE_URL}/order/get-order`,{
       headers: {
         Authorization : token
       }

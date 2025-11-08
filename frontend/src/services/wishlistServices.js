@@ -4,7 +4,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const fetchWishlist = async (token) => {
   try {    
-    const { data } = await axios.get(`${API_BASE_URL}/api/v1/wishlist/get-wishlist`,{
+    const { data } = await axios.get(`${API_BASE_URL}/wishlist/get-wishlist`,{
         headers: {
           Authorization : token
         }
@@ -18,7 +18,7 @@ export const fetchWishlist = async (token) => {
 
 export const addToWishlist = async (productId) => {
   try {
-    const { data } = await axios.post(`${API_BASE_URL}/api/v1/wishlist/add-wishlist`, {
+    const { data } = await axios.post(`${API_BASE_URL}/wishlist/add-wishlist`, {
       productId,
     });
     return data;
@@ -30,7 +30,7 @@ export const addToWishlist = async (productId) => {
 
 export const removeFromWishlist = async (wishlistItemId) => {
   try {    
-    const { data } = await axios.delete(`${API_BASE_URL}/api/v1/wishlist/remove-wishlist/${wishlistItemId}`);
+    const { data } = await axios.delete(`${API_BASE_URL}/wishlist/remove-wishlist/${wishlistItemId}`);
     return data;
   } catch (error) {
     console.error("Error removing item from wishlist:", error);

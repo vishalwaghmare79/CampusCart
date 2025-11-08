@@ -5,7 +5,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const createProduct = async (productData) => {
   try {
     const res = await axios.post(
-      `${API_BASE_URL}/api/v1/product/create-product`,
+      `${API_BASE_URL}/product/create-product`,
       productData);
     return res.data;
   } catch (error) {
@@ -15,7 +15,7 @@ export const createProduct = async (productData) => {
 
 export const getProductById = async ( id, token) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/v1/product/get-product/${id}`,{
+    const response = await axios.get(`${API_BASE_URL}/product/get-product/${id}`,{
       headers: {
         Authorization : token
       }
@@ -29,7 +29,7 @@ export const getProductById = async ( id, token) => {
 
 export const getAllProducts = async (token) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/v1/product/get-products`,{
+    const response = await axios.get(`${API_BASE_URL}/product/get-products`,{
       headers: {
         Authorization : token
       }
@@ -42,14 +42,14 @@ export const getAllProducts = async (token) => {
 };
 
 export const getProductsByCategory = async (categoryId, token) => {
-  const response = await axios.get(`${API_BASE_URL}/api/v1/product/get-products/${categoryId}`);
+  const response = await axios.get(`${API_BASE_URL}/product/get-products/${categoryId}`);
   return response.data;
 };
 
 export const getUserProducts = async (token) => {
   
   try {
-    const res = await axios.get(`${API_BASE_URL}/api/v1/product/user-products`,{
+    const res = await axios.get(`${API_BASE_URL}/product/user-products`,{
       headers: {
         Authorization : token
       }
@@ -63,7 +63,7 @@ export const getUserProducts = async (token) => {
 export const updateProduct = async (id, productData) => {
   try {
     const res = await axios.put(
-      `${API_BASE_URL}/api/v1/product/update-product/${id}`,
+      `${API_BASE_URL}/product/update-product/${id}`,
       productData
     );
     return res.data;
@@ -75,7 +75,7 @@ export const updateProduct = async (id, productData) => {
 export const deleteProduct = async (id) => {
   try {
     const res = await axios.delete(
-      `${API_BASE_URL}/api/v1/product/delete-product/${id}`
+      `${API_BASE_URL}/product/delete-product/${id}`
     );
     return res.data;
   } catch (error) {

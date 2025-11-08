@@ -1,39 +1,56 @@
-import express from 'express';
-import { authRoutes } from './routes/authRoutes.js';
-import { categoryRoutes } from './routes/categoryRoute.js';
-import { productRoutes } from './routes/productRoute.js';
-import { wishlistRoutes } from './routes/wishlistRoute.js';
-import { connectDB } from './config/db.js';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { orderRoutes } from './routes/orderRoutes.js';
-import axios from 'axios'; // Add this line
+import express from "express";
+import { authRoutes } from "./routes/authRoutes.js";
+import { categoryRoutes } from "./routes/categoryRoute.js";
+import { productRoutes } from "./routes/productRoute.js";
+import { wishlistRoutes } from "./routes/wishlistRoute.js";
+import { orderRoutes } from "./routes/orderRoutes.js";
+import { connectDB } from "./config/db.js";
+import cors from "cors";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import axios from "axios"; // Keep if used inside routes
+
 dotenv.config();
+
 const app = express();
 
-
+// ---------- Middleware ----------
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/v1/auth", authRoutes); // usersRouter
-app.use('/api/v1/category', categoryRoutes); // categoryRouter
-app.use('/api/v1/product', productRoutes); // productRouter
-app.use('/api/v1/wishlist', wishlistRoutes); // wishlistRoute
-app.use('/api/v1/order', orderRoutes) // paymentRouter
+// ---------- API Routes ----------
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/wishlist", wishlistRoutes);
+app.use("/api/v1/order", orderRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Welcome to ShopEase");
+// ---------- Serve React Frontend ----------
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static frontend files (after Docker build)
+app.use(express.static(path.join(__dirname, "..", "public")));
+
+// Handle all other routes by sending React index.html
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 });
 
-const port = process.env.PORT || 4000;
+// ---------- Start Server ----------
+const port = process.env.PORT || 5000;
 
 connectDB()
   .then(() => {
     app.listen(port, () => {
-      console.log(`Server running at http://localhost:${port}`);
+      console.log(`✅ Server running at http://localhost:${port}`);
     });
   })
   .catch((error) => {
-    console.error("Error connecting to Database:", error.message);
+    console.error("❌ Error connecting to Database:", error.message);
   });
